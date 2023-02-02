@@ -429,7 +429,7 @@ class _CartListScreenState extends State<CartListScreen>
                                                 //color size
                                                 Expanded(
                                                   child: Text(
-                                                    "Color: ${cartModel.color!.replaceAll('[', '').replaceAll(']', '')}" + "\n" + "Size: ${cartModel.size!.replaceAll('[', '').replaceAll(']', '')}",
+                                                    "Color: ₹{cartModel.color!.replaceAll('[', '').replaceAll(']', '')}" + "\n" + "Size: ₹{cartModel.size!.replaceAll('[', '').replaceAll(']', '')}",
                                                     maxLines: 3,
                                                     overflow: TextOverflow.ellipsis,
                                                     style: const TextStyle(
@@ -445,10 +445,10 @@ class _CartListScreenState extends State<CartListScreen>
                                                       right: 12.0
                                                   ),
                                                   child: Text(
-                                                    "\$" + clothesModel.price.toString(),
+                                                    "\₹" + clothesModel.price.toString(),
                                                     style: const TextStyle(
                                                       fontSize: 20,
-                                                      color: Colors.purpleAccent,
+                                                      color: Colors.orangeAccent,
                                                       fontWeight: FontWeight.bold,
                                                     ),
                                                   ),
@@ -488,7 +488,7 @@ class _CartListScreenState extends State<CartListScreen>
                                                 Text(
                                                   cartModel.quantity.toString(),
                                                   style: const TextStyle(
-                                                    color: Colors.purpleAccent,
+                                                    color: Colors.orangeAccent,
                                                     fontSize: 20,
                                                     fontWeight: FontWeight.bold,
                                                   ),
@@ -592,7 +592,7 @@ class _CartListScreenState extends State<CartListScreen>
                 const SizedBox(width: 4),
                 Obx(()=>
                   Text(
-                    "\$ " + cartListController.total.toStringAsFixed(2),
+                    "\₹ " + cartListController.total.toStringAsFixed(2),
                     maxLines: 1,
                     style: const TextStyle(
                       color: Colors.white70,
@@ -607,7 +607,7 @@ class _CartListScreenState extends State<CartListScreen>
                 //order now btn
                 Material(
                   color: cartListController.selectedItemList.length > 0
-                      ? Colors.purpleAccent
+                      ? Colors.orangeAccent
                       : Colors.white24,
                   borderRadius: BorderRadius.circular(30),
                   child: InkWell(

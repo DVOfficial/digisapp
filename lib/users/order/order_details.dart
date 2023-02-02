@@ -374,7 +374,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                           fontSize: 18,
-                          color: Colors.purpleAccent,
+                          color: Colors.orangeAccent,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -402,7 +402,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                   "Q: " + itemInfo["quantity"].toString(),
                   style: const TextStyle(
                     fontSize: 24,
-                    color: Colors.purpleAccent,
+                    color: Colors.orangeAccent,
                   ),
                 ),
               ),

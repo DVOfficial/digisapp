@@ -86,7 +86,7 @@ class AdminGetAllOrdersScreen extends StatelessWidget
                     const Text(
                       "All New Orders",
                       style: TextStyle(
-                        color: Colors.purpleAccent,
+                        color: Colors.orangeAccent,
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
                       ),
@@ -200,10 +200,10 @@ class AdminGetAllOrdersScreen extends StatelessWidget
                           ),
                         ),
                         Text(
-                          "Amount: \$ " + eachOrderData.totalAmount.toString(),
+                          "Amount: \₹ " + eachOrderData.totalAmount.toString(),
                           style: const TextStyle(
                             fontSize: 16,
-                            color: Colors.purpleAccent,
+                            color: Colors.orangeAccent,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -249,7 +249,7 @@ class AdminGetAllOrdersScreen extends StatelessWidget
 
                         const Icon(
                           Icons.navigate_next,
-                          color: Colors.purpleAccent,
+                          color: Colors.orangeAccent,
                         ),
 
                       ],

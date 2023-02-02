@@ -107,7 +107,7 @@ class HomeFragmentScreen extends StatelessWidget
             child: Text(
               "Trending",
               style: TextStyle(
-                color: Colors.purpleAccent,
+                color: Colors.orangeAccent,
                 fontWeight: FontWeight.bold,
                 fontSize: 24,
               ),
@@ -123,7 +123,7 @@ class HomeFragmentScreen extends StatelessWidget
             child: Text(
               "New Collections",
               style: TextStyle(
-                color: Colors.purpleAccent,
+                color: Colors.orangeAccent,
                 fontWeight: FontWeight.bold,
                 fontSize: 24,
               ),
@@ -152,7 +152,7 @@ class HomeFragmentScreen extends StatelessWidget
             },
             icon: const Icon(
               Icons.search,
-              color: Colors.purpleAccent,
+              color: Colors.orangeAccent,
             ),
           ),
           hintText: "Search Organic Products here...",
@@ -167,19 +167,19 @@ class HomeFragmentScreen extends StatelessWidget
             },
             icon: const Icon(
               Icons.shopping_cart,
-              color: Colors.purpleAccent,
+              color: Colors.orangeAccent,
             ),
           ),
           enabledBorder: const OutlineInputBorder(
             borderSide: BorderSide(
               width: 2,
-              color: Colors.purple,
+              color: Colors.orange,
             ),
           ),
           focusedBorder: const OutlineInputBorder(
             borderSide: BorderSide(
               width: 2,
-              color: Colors.purpleAccent,
+              color: Colors.orangeAccent,
             ),
           ),
           contentPadding: const EdgeInsets.symmetric(
@@ -303,7 +303,7 @@ class HomeFragmentScreen extends StatelessWidget
                                   Text(
                                     "\₹ " + eachClothItemData.price.toString(),
                                     style: const TextStyle(
-                                      color: Colors.purpleAccent,
+                                      color: Colors.orangeAccent,
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -461,7 +461,7 @@ class HomeFragmentScreen extends StatelessWidget
                                         overflow: TextOverflow.ellipsis,
                                         style: const TextStyle(
                                           fontSize: 18,
-                                          color: Colors.purpleAccent,
+                                          color: Colors.orangeAccent,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),

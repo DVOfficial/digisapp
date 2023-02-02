@@ -14,6 +14,7 @@ import '../userPreferences/current_user.dart';
 
 class FavoritesFragmentScreen extends StatelessWidget
 {
+
   final currentOnlineUser = Get.put(CurrentUser());
 
   Future<List<Favorite>> getCurrentUserFavoriteList() async
@@ -67,7 +68,7 @@ class FavoritesFragmentScreen extends StatelessWidget
             child: Text(
               "My Favorite List:",
               style: TextStyle(
-                color: Colors.purpleAccent,
+                color: Colors.orangeAccent,
                 fontSize: 30,
                 fontWeight: FontWeight.bold,
               ),
@@ -198,12 +199,12 @@ class FavoritesFragmentScreen extends StatelessWidget
                                     Padding(
                                       padding: const EdgeInsets.only(left: 12, right: 12),
                                       child: Text(
-                                        "\$ " + eachFavoriteItemRecord.price.toString(),
+                                        "\₹ " + eachFavoriteItemRecord.price.toString(),
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
                                         style: const TextStyle(
                                           fontSize: 18,
-                                          color: Colors.purpleAccent,
+                                          color: Colors.orangeAccent,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),

@@ -71,7 +71,7 @@ class _AdminUploadItemsScreenState extends State<AdminUploadItemsScreen>
           title: const Text(
             "Item Image",
             style: TextStyle(
-              color: Colors.deepPurple,
+              color: Colors.deepOrange,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -128,7 +128,7 @@ class _AdminUploadItemsScreenState extends State<AdminUploadItemsScreen>
             gradient: LinearGradient(
               colors: [
                 Colors.black54,
-                Colors.deepPurple,
+                Colors.deepOrange,
               ],
             ),
           ),
@@ -167,7 +167,7 @@ class _AdminUploadItemsScreenState extends State<AdminUploadItemsScreen>
           gradient: LinearGradient(
             colors: [
               Colors.black54,
-              Colors.deepPurple,
+              Colors.deepOrange,
             ],
           ),
         ),
@@ -317,7 +317,7 @@ class _AdminUploadItemsScreenState extends State<AdminUploadItemsScreen>
             gradient: LinearGradient(
               colors: [
                 Colors.black54,
-                Colors.deepPurple,
+                Colors.deepOrange,
               ],
             ),
           ),

@@ -70,7 +70,7 @@ class OrderNowScreen extends StatelessWidget
                     RadioListTile<String>(
                       tileColor: Colors.white24,
                       dense: true,
-                      activeColor: Colors.purpleAccent,
+                      activeColor: Colors.orangeAccent,
                       title: Text(
                         deliverySystemName,
                         style: const TextStyle(fontSize: 16, color: Colors.white38),
@@ -126,7 +126,7 @@ class OrderNowScreen extends StatelessWidget
                     RadioListTile<String>(
                       tileColor: Colors.white24,
                       dense: true,
-                      activeColor: Colors.purpleAccent,
+                      activeColor: Colors.orangeAccent,
                       title: Text(
                         paymentSystemName,
                         style: const TextStyle(fontSize: 16, color: Colors.white38),
@@ -290,7 +290,7 @@ class OrderNowScreen extends StatelessWidget
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Material(
-              color: Colors.purpleAccent,
+              color: Colors.orangeAccent,
               borderRadius: BorderRadius.circular(30),
               child: InkWell(
                 onTap: ()
@@ -453,7 +453,7 @@ class OrderNowScreen extends StatelessWidget
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                           fontSize: 18,
-                          color: Colors.purpleAccent,
+                          color: Colors.orangeAccent,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -481,7 +481,7 @@ class OrderNowScreen extends StatelessWidget
                   "Q: " + eachSelectedItem["quantity"].toString(),
                   style: const TextStyle(
                     fontSize: 24,
-                    color: Colors.purpleAccent,
+                    color: Colors.orangeAccent,
                   ),
                 ),
               ),

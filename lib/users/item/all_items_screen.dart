@@ -1,170 +1,114 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import '../../api_connection/api_connection.dart';
-import '../cart/cart_list_screen.dart';
 import 'package:http/http.dart' as http;
 
+import '../../api_connection/api_connection.dart';
+import '../cart/cart_list_screen.dart';
+import '../item/item_details_screen.dart';
+import '../item/search_items.dart';
+import '../model/category.dart';
 import '../model/clothes.dart';
-import 'item_details_screen.dart';
 
 
-class SearchItems extends StatefulWidget
+class AllItemsScreen extends StatelessWidget
 {
-  final String? typedKeyWords;
 
-  SearchItems({this.typedKeyWords,});
+  final Category? itemInfo;
 
-  @override
-  State<SearchItems> createState() => _SearchItemsState();
-}
+  AllItemsScreen({this.itemInfo,});
 
 
-
-class _SearchItemsState extends State<SearchItems>
-{
-  TextEditingController searchController = TextEditingController();
-
-
-  Future<List<Clothes>> readSearchRecordsFound() async
+  Future<List<Clothes>> getCurrentUserFavoriteList() async
   {
-    List<Clothes> clothesSearchList = [];
+    List<Clothes> favoriteListOfCurrentUser = [];
 
-    if(searchController.text != "")
+    try
     {
-      try
-      {
-        var res = await http.post(
-            Uri.parse(API.searchItems),
-            body:
-            {
-              "typedKeyWords": searchController.text,
-            }
-        );
-
-        if (res.statusCode == 200)
-        {
-          var responseBodyOfSearchItems = jsonDecode(res.body);
-
-          if (responseBodyOfSearchItems['success'] == true)
+      var res = await http.post(
+          Uri.parse(API.readAllItems),
+          body:
           {
-            (responseBodyOfSearchItems['itemsFoundData'] as List).forEach((eachItemData)
-            {
-              clothesSearchList.add(Clothes.fromJson(eachItemData));
-            });
+            // "user_id": itemInfo.user.user_id.toString(),
+            "category_id": itemInfo!.category_id.toString(),
           }
-        }
-        else
+      );
+
+      if (res.statusCode == 200)
+      {
+        var responseBodyOfCurrentUserFavoriteListItems = jsonDecode(res.body);
+
+        if (responseBodyOfCurrentUserFavoriteListItems['success'] == true)
         {
-          Fluttertoast.showToast(msg: "Status Code is not 200");
+          (responseBodyOfCurrentUserFavoriteListItems['currentUserFavoriteData'] as List).forEach((eachCurrentUserFavoriteItemData)
+          {
+            favoriteListOfCurrentUser.add(Clothes.fromJson(eachCurrentUserFavoriteItemData));
+            // print("Error:: " + errorMsg.toString());
+          });
         }
       }
-      catch(errorMsg)
+      else
       {
-        Fluttertoast.showToast(msg: "Error:: " + errorMsg.toString());
+        Fluttertoast.showToast(msg: "Status Code is not 200");
       }
     }
+    catch(errorMsg)
+    {
+      Fluttertoast.showToast(msg: "Error:: " + errorMsg.toString());
+    }
 
-    return clothesSearchList;
+    return favoriteListOfCurrentUser;
   }
 
   @override
-  void initState()
-  {
-    super.initState();
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
 
-    searchController.text = widget.typedKeyWords!;
-  }
-
-  @override
-  Widget build(BuildContext context)
-  {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: AppBar(
-        backgroundColor: Colors.white24,
-        title: showSearchBarWidget(),
-        titleSpacing: 0,
-        leading: IconButton(
-          onPressed: ()
-          {
-            Get.back();
-          },
-          icon: const Icon(
-            Icons.arrow_back,
-            color: Colors.orangeAccent,
-          ),
-        ),
-      ),
-      body: searchItemDesignWidget(context),
-    );
-  }
-
-  Widget showSearchBarWidget()
-  {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 18),
-      child: TextField(
-        style: const TextStyle(color: Colors.white),
-        controller: searchController,
-        decoration: InputDecoration(
-          prefixIcon: IconButton(
-            onPressed: ()
-            {
-              setState(() {
-              });
-            },
-            icon: const Icon(
-              Icons.search,
-              color: Colors.orangeAccent,
+          const Padding(
+            padding: EdgeInsets.fromLTRB(16, 24, 8, 8),
+            child: Text(
+              "My Favorite List:",
+              style: TextStyle(
+                color: Colors.orangeAccent,
+                fontSize: 30,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
-          hintText: "Search best organic products here...",
-          hintStyle: const TextStyle(
-            color: Colors.grey,
-            fontSize: 12,
-          ),
-          suffixIcon: IconButton(
-            onPressed: ()
-            {
-              searchController.clear();
 
-              setState(() {
-              });
-            },
-            icon: const Icon(
-              Icons.close,
-              color: Colors.orangeAccent,
+          const Padding(
+            padding: EdgeInsets.fromLTRB(16, 24, 8, 8),
+            child: Text(
+              "Order these best organic products now.",
+              style: TextStyle(
+                color: Colors.grey,
+                fontSize: 16,
+                fontWeight: FontWeight.w300,
+              ),
             ),
           ),
-          enabledBorder: const OutlineInputBorder(
-            borderSide: BorderSide(
-              width: 2,
-              color: Colors.orange,
-            ),
-          ),
-          focusedBorder: const OutlineInputBorder(
-            borderSide: BorderSide(
-              width: 2,
-              color: Colors.orangeAccent,
-            ),
-          ),
-          contentPadding: const EdgeInsets.symmetric(
-            horizontal: 16,
-            vertical: 10,
-          ),
-        ),
+
+          const SizedBox(height: 24),
+
+          //displaying favoriteList
+          favoriteListItemDesignWidget(context),
+
+        ],
       ),
     );
   }
 
-  searchItemDesignWidget(context)
+  favoriteListItemDesignWidget(context)
   {
     return FutureBuilder(
-        future: readSearchRecordsFound(),
+        future: getCurrentUserFavoriteList(),
         builder: (context, AsyncSnapshot<List<Clothes>> dataSnapShot)
         {
           if(dataSnapShot.connectionState == ConnectionState.waiting)
@@ -177,7 +121,8 @@ class _SearchItemsState extends State<SearchItems>
           {
             return const Center(
               child: Text(
-                "No Trending item found",
+                "No favorite item found",
+                style: TextStyle(color: Colors.grey,),
               ),
             );
           }
@@ -190,12 +135,24 @@ class _SearchItemsState extends State<SearchItems>
               scrollDirection: Axis.vertical,
               itemBuilder: (context, index)
               {
-                Clothes eachClothItemRecord = dataSnapShot.data![index];
+                Clothes eachFavoriteItemRecord = dataSnapShot.data![index];
+
+                Clothes clickedClothItem = Clothes(
+                  item_id: eachFavoriteItemRecord.item_id,
+                  colors: eachFavoriteItemRecord.colors,
+                  image: eachFavoriteItemRecord.image,
+                  name: eachFavoriteItemRecord.name,
+                  price: eachFavoriteItemRecord.price,
+                  rating: eachFavoriteItemRecord.rating,
+                  sizes: eachFavoriteItemRecord.sizes,
+                  description: eachFavoriteItemRecord.description,
+                  tags: eachFavoriteItemRecord.tags,
+                );
 
                 return GestureDetector(
                   onTap: ()
                   {
-                    Get.to(ItemDetailsScreen(itemInfo: eachClothItemRecord));
+                    Get.to(ItemDetailsScreen(itemInfo: clickedClothItem));
                   },
                   child: Container(
                     margin: EdgeInsets.fromLTRB(
@@ -235,7 +192,7 @@ class _SearchItemsState extends State<SearchItems>
                                     //name
                                     Expanded(
                                       child: Text(
-                                        eachClothItemRecord.name!,
+                                        eachFavoriteItemRecord.name!,
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
                                         style: const TextStyle(
@@ -250,7 +207,7 @@ class _SearchItemsState extends State<SearchItems>
                                     Padding(
                                       padding: const EdgeInsets.only(left: 12, right: 12),
                                       child: Text(
-                                        "\₹ " + eachClothItemRecord.price.toString(),
+                                        "\₹ " + eachFavoriteItemRecord.price.toString(),
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
                                         style: const TextStyle(
@@ -268,7 +225,7 @@ class _SearchItemsState extends State<SearchItems>
 
                                 //tags
                                 Text(
-                                  "Tags: \n" + eachClothItemRecord.tags.toString().replaceAll("[", "").replaceAll("]", ""),
+                                  "Tags: \n" + eachFavoriteItemRecord.tags.toString().replaceAll("[", "").replaceAll("]", ""),
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                   style: const TextStyle(
@@ -294,7 +251,7 @@ class _SearchItemsState extends State<SearchItems>
                             fit: BoxFit.cover,
                             placeholder: const AssetImage("images/place_holder.png"),
                             image: NetworkImage(
-                              eachClothItemRecord.image!,
+                              eachFavoriteItemRecord.image!,
                             ),
                             imageErrorBuilder: (context, error, stackTraceError)
                             {

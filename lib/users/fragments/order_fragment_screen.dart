@@ -87,7 +87,7 @@ class OrderFragmentScreen extends StatelessWidget
                     const Text(
                       "My Orders",
                       style: TextStyle(
-                        color: Colors.purpleAccent,
+                        color: Colors.orangeAccent,
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
                       ),
@@ -114,7 +114,7 @@ class OrderFragmentScreen extends StatelessWidget
                         const Text(
                           "History",
                           style: TextStyle(
-                            color: Colors.purpleAccent,
+                            color: Colors.orangeAccent,
                             fontSize: 12,
                             fontWeight: FontWeight.bold,
                           ),
@@ -235,7 +235,7 @@ class OrderFragmentScreen extends StatelessWidget
                           "Amount: \₹ " + eachOrderData.totalAmount.toString(),
                           style: const TextStyle(
                             fontSize: 16,
-                            color: Colors.purpleAccent,
+                            color: Colors.orangeAccent,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -281,7 +281,7 @@ class OrderFragmentScreen extends StatelessWidget
 
                         const Icon(
                           Icons.navigate_next,
-                          color: Colors.purpleAccent,
+                          color: Colors.orangeAccent,
                         ),
 
                       ],

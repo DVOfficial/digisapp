@@ -23,6 +23,7 @@ class API
   //items
   static const uploadNewItem = "$hostItem/upload.php";
   static const searchItems = "$hostItem/search.php";
+  static const readAllItems = "$hostItem/readallitems.php";
 
   //Clothes
   static const getTrendingMostPopularClothes = "$hostClothes/trending.php";

@@ -194,7 +194,7 @@ class OrderConfirmationScreen extends StatelessWidget
             //select image btn
             Material(
               elevation: 8,
-              color: Colors.purpleAccent,
+              color: Colors.orangeAccent,
               borderRadius: BorderRadius.circular(30),
               child: InkWell(
                 onTap: ()
@@ -236,7 +236,7 @@ class OrderConfirmationScreen extends StatelessWidget
             //confirm and proceed
             Obx(()=> Material(
               elevation: 8,
-              color: imageSelectedByte.length > 0 ? Colors.purpleAccent : Colors.grey,
+              color: imageSelectedByte.length > 0 ? Colors.orangeAccent : Colors.grey,
               borderRadius: BorderRadius.circular(30),
               child: InkWell(
                 onTap: ()

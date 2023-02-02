@@ -9,6 +9,7 @@ import 'package:http/http.dart' as http;
 
 import '../../api_connection/api_connection.dart';
 import '../cart/cart_list_screen.dart';
+import '../item/all_items_screen.dart';
 import '../item/item_details_screen.dart';
 import '../item/search_items.dart';
 import '../model/category.dart';
@@ -18,41 +19,6 @@ import '../model/clothes.dart';
 class CategoryFragmentScreen extends StatelessWidget
 {
   TextEditingController searchController = TextEditingController();
-
-
-  // Future<List<Clothes>> getTrendingClothItems() async
-  // {
-  //   List<Clothes> trendingClothItemsList = [];
-  //
-  //   try
-  //   {
-  //     var res = await http.post(
-  //         Uri.parse(API.getTrendingMostPopularClothes)
-  //     );
-  //
-  //     if(res.statusCode == 200)
-  //     {
-  //       var responseBodyOfTrending = jsonDecode(res.body);
-  //       if(responseBodyOfTrending["success"] == true)
-  //       {
-  //         (responseBodyOfTrending["clothItemsData"] as List).forEach((eachRecord)
-  //         {
-  //           trendingClothItemsList.add(Clothes.fromJson(eachRecord));
-  //         });
-  //       }
-  //     }
-  //     else
-  //     {
-  //       Fluttertoast.showToast(msg: "Error, status code is not 200");
-  //     }
-  //   }
-  //   catch(errorMsg)
-  //   {
-  //     print("Error:: " + errorMsg.toString());
-  //   }
-  //
-  //   return trendingClothItemsList;
-  // }
 
   Future<List<Category>> getAllClothItems() async
   {
@@ -102,29 +68,12 @@ class CategoryFragmentScreen extends StatelessWidget
 
           const SizedBox(height: 24,),
 
-          // //trending-popular items
-          // const Padding(
-          //   padding: EdgeInsets.symmetric(horizontal: 18),
-          //   child: Text(
-          //     "Trending",
-          //     style: TextStyle(
-          //       color: Colors.purpleAccent,
-          //       fontWeight: FontWeight.bold,
-          //       fontSize: 24,
-          //     ),
-          //   ),
-          // ),
-          // trendingMostPopularClothItemWidget(context),
-          //
-          // const SizedBox(height: 24,),
-
-          //all new collections/items
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 18),
             child: Text(
               "Categories",
               style: TextStyle(
-                color: Colors.purpleAccent,
+                color: Colors.orangeAccent,
                 fontWeight: FontWeight.bold,
                 fontSize: 24,
               ),
@@ -153,7 +102,7 @@ class CategoryFragmentScreen extends StatelessWidget
             },
             icon: const Icon(
               Icons.search,
-              color: Colors.purpleAccent,
+              color: Colors.orangeAccent,
             ),
           ),
           hintText: "Search organic products here...",
@@ -168,19 +117,19 @@ class CategoryFragmentScreen extends StatelessWidget
             },
             icon: const Icon(
               Icons.shopping_cart,
-              color: Colors.purpleAccent,
+              color: Colors.orangeAccent,
             ),
           ),
           enabledBorder: const OutlineInputBorder(
             borderSide: BorderSide(
               width: 2,
-              color: Colors.purple,
+              color: Colors.orange,
             ),
           ),
           focusedBorder: const OutlineInputBorder(
             borderSide: BorderSide(
               width: 2,
-              color: Colors.purpleAccent,
+              color: Colors.orangeAccent,
             ),
           ),
           contentPadding: const EdgeInsets.symmetric(
@@ -384,7 +333,7 @@ class CategoryFragmentScreen extends StatelessWidget
           {
             return const Center(
               child: Text(
-                "No Trending item found",
+                "No categories found",
               ),
             );
           }
@@ -397,12 +346,13 @@ class CategoryFragmentScreen extends StatelessWidget
               scrollDirection: Axis.vertical,
               itemBuilder: (context, index)
               {
-                Category eachClothItemRecord = dataSnapShot.data![index];
+                Category eachCategoryItemRecord = dataSnapShot.data![index];
 
                 return GestureDetector(
                   onTap: ()
                   {
-                    // Get.to(ItemDetailsScreen(itemInfo: eachClothItemRecord));
+                    Get.to(AllItemsScreen(itemInfo: eachCategoryItemRecord));
+
                   },
                   child: Container(
                     margin: EdgeInsets.fromLTRB(
@@ -442,7 +392,7 @@ class CategoryFragmentScreen extends StatelessWidget
                                     //name
                                     Expanded(
                                       child: Text(
-                                        eachClothItemRecord.category_name!,
+                                        eachCategoryItemRecord.category_name!,
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
                                         style: const TextStyle(
@@ -501,7 +451,7 @@ class CategoryFragmentScreen extends StatelessWidget
                             fit: BoxFit.cover,
                             placeholder: const AssetImage("images/place_holder.png"),
                             image: NetworkImage(
-                              eachClothItemRecord.category_imagelink!,
+                              eachCategoryItemRecord.category_imagelink!,
                             ),
                             imageErrorBuilder: (context, error, stackTraceError)
                             {

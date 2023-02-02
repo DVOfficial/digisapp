@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
       title: 'Digisfresh App',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.purple,
+        primarySwatch: Colors.orange,
       ),
       home: FutureBuilder(
         future: RememberUserPrefs.readUserInfo(),
