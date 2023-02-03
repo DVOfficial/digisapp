@@ -14,7 +14,7 @@ import '../fragments/dashboard_of_fragments.dart';
 import '../model/order.dart';
 import '../userPreferences/current_user.dart';
 
-class OrderConfirmationScreen extends StatelessWidget
+class OrderConfirmationScreen1 extends StatelessWidget
 {
   final List<int>? selectedCartIDs;
   final List<Map<String, dynamic>>? selectedCartListItemsInfo;
@@ -25,7 +25,7 @@ class OrderConfirmationScreen extends StatelessWidget
   final String? shipmentAddress;
   final String? note;
 
-  OrderConfirmationScreen({
+  OrderConfirmationScreen1({
     this.selectedCartIDs,
     this.selectedCartListItemsInfo,
     this.totalAmount,
@@ -36,40 +36,40 @@ class OrderConfirmationScreen extends StatelessWidget
     this.note,
   });
 
-
-  RxList<int> _imageSelectedByte = <int>[].obs;
-  Uint8List get imageSelectedByte => Uint8List.fromList(_imageSelectedByte);
-
-  RxString _imageSelectedName = "".obs;
-  String get imageSelectedName => _imageSelectedName.value;
-
-  final ImagePicker _picker = ImagePicker();
+  //
+  // RxList<int> _imageSelectedByte = <int>[].obs;
+  // Uint8List get imageSelectedByte => Uint8List.fromList(_imageSelectedByte);
+  //
+  // RxString _imageSelectedName = "".obs;
+  // String get imageSelectedName => _imageSelectedName.value;
+  //
+  // final ImagePicker _picker = ImagePicker();
 
   CurrentUser currentUser = Get.put(CurrentUser());
 
-
-  setSelectedImage(Uint8List selectedImage)
-  {
-    _imageSelectedByte.value = selectedImage;
-  }
-
-  setSelectedImageName(String selectedImageName)
-  {
-    _imageSelectedName.value = selectedImageName;
-  }
-
-  chooseImageFromGallery() async
-  {
-    final pickedImageXFile = await _picker.pickImage(source: ImageSource.gallery);
-
-    if(pickedImageXFile != null)
-    {
-      final bytesOfImage = await pickedImageXFile.readAsBytes();
-
-      setSelectedImage(bytesOfImage);
-      setSelectedImageName(path.basename(pickedImageXFile.path));
-    }
-  }
+  //
+  // setSelectedImage(Uint8List selectedImage)
+  // {
+  //   _imageSelectedByte.value = selectedImage;
+  // }
+  //
+  // setSelectedImageName(String selectedImageName)
+  // {
+  //   _imageSelectedName.value = selectedImageName;
+  // }
+  //
+  // chooseImageFromGallery() async
+  // {
+  //   final pickedImageXFile = await _picker.pickImage(source: ImageSource.gallery);
+  //
+  //   if(pickedImageXFile != null)
+  //   {
+  //     final bytesOfImage = await pickedImageXFile.readAsBytes();
+  //
+  //     setSelectedImage(bytesOfImage);
+  //     setSelectedImageName(path.basename(pickedImageXFile.path));
+  //   }
+  // }
 
   saveNewOrderInfo() async
   {
@@ -83,7 +83,7 @@ class OrderConfirmationScreen extends StatelessWidget
       paymentSystem: paymentSystem,
       note: note,
       totalAmount: totalAmount,
-      image: DateTime.now().millisecondsSinceEpoch.toString() + "-" + imageSelectedName,
+      // image: DateTime.now().millisecondsSinceEpoch.toString() + "-" + imageSelectedName,
       status: "new",
       dateTime: DateTime.now(),
       shipmentAddress: shipmentAddress,
@@ -94,7 +94,7 @@ class OrderConfirmationScreen extends StatelessWidget
     {
       var res = await http.post(
         Uri.parse(API.addOrder),
-        // body: order.toJson(base64Encode(imageSelectedByte)),
+        body: order.toJson(),
       );
 
       if (res.statusCode == 200)
@@ -117,7 +117,7 @@ class OrderConfirmationScreen extends StatelessWidget
     }
     catch(erroeMsg)
     {
-      Fluttertoast.showToast(msg: "Error: " + erroeMsg.toString());
+      Fluttertoast.showToast(msg: "Error1: " + erroeMsg.toString());
     }
   }
 
@@ -151,9 +151,9 @@ class OrderConfirmationScreen extends StatelessWidget
     }
     catch(errorMessage)
     {
-      print("Error: " + errorMessage.toString());
+      print("Error2: " + errorMessage.toString());
 
-      Fluttertoast.showToast(msg: "Error: " + errorMessage.toString());
+      Fluttertoast.showToast(msg: "Error3: " + errorMessage.toString());
     }
   }
 
@@ -191,65 +191,66 @@ class OrderConfirmationScreen extends StatelessWidget
 
             const SizedBox(height: 30),
 
-            //select image btn
-            Material(
-              elevation: 8,
-              color: Colors.orangeAccent,
-              borderRadius: BorderRadius.circular(30),
-              child: InkWell(
-                onTap: ()
-                {
-                  chooseImageFromGallery();
-                },
-                borderRadius: BorderRadius.circular(30),
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 30,
-                    vertical: 12,
-                  ),
-                  child: Text(
-                    "Select Image",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                    ),
-                  ),
-                ),
-              ),
-            ),
+            // //select image btn
+            // Material(
+            //   elevation: 8,
+            //   color: Colors.orangeAccent,
+            //   borderRadius: BorderRadius.circular(30),
+            //   child: InkWell(
+            //     onTap: ()
+            //     {
+            //       chooseImageFromGallery();
+            //     },
+            //     borderRadius: BorderRadius.circular(30),
+            //     child: const Padding(
+            //       padding: EdgeInsets.symmetric(
+            //         horizontal: 30,
+            //         vertical: 12,
+            //       ),
+            //       child: Text(
+            //         "Select Image",
+            //         style: TextStyle(
+            //           color: Colors.white,
+            //           fontSize: 16,
+            //         ),
+            //       ),
+            //     ),
+            //   ),
+            // ),
 
             const SizedBox(height: 16),
 
-            //display selected image by user
-            Obx(()=> ConstrainedBox(
-              constraints: BoxConstraints(
-                maxWidth: MediaQuery.of(context).size.width * 0.7,
-                maxHeight: MediaQuery.of(context).size.width * 0.6,
-              ),
-              child: imageSelectedByte.length > 0
-                  ? Image.memory(imageSelectedByte, fit: BoxFit.contain,)
-                  : const Placeholder(color: Colors.white60,),
-            )),
+            // //display selected image by user
+            // Obx(()=> ConstrainedBox(
+            //   constraints: BoxConstraints(
+            //     maxWidth: MediaQuery.of(context).size.width * 0.7,
+            //     maxHeight: MediaQuery.of(context).size.width * 0.6,
+            //   ),
+            //   child: imageSelectedByte.length > 0
+            //       ? Image.memory(imageSelectedByte, fit: BoxFit.contain,)
+            //       : const Placeholder(color: Colors.white60,),
+            // )),
 
             const SizedBox(height: 16),
 
             //confirm and proceed
-            Obx(()=> Material(
+            // Obx(()=>
+                Material(
               elevation: 8,
-              color: imageSelectedByte.length > 0 ? Colors.orangeAccent : Colors.grey,
+              // color: imageSelectedByte.length > 0 ? Colors.orangeAccent : Colors.grey,
               borderRadius: BorderRadius.circular(30),
               child: InkWell(
                 onTap: ()
                 {
-                  if(imageSelectedByte.length > 0)
-                  {
+                  // if(imageSelectedByte.length > 0)
+                  // {
                     //save order info
                     saveNewOrderInfo();
-                  }
-                  else
-                  {
-                    Fluttertoast.showToast(msg: "Please attach the transaction proof / screenshot.");
-                  }
+                  // }
+                  // else
+                  // {
+                  //   Fluttertoast.showToast(msg: "Please attach the transaction proof / screenshot.");
+                  // }
                 },
                 borderRadius: BorderRadius.circular(30),
                 child: const Padding(
@@ -266,7 +267,8 @@ class OrderConfirmationScreen extends StatelessWidget
                   ),
                 ),
               ),
-            )),
+            ),
+            // ),
 
           ],
         ),

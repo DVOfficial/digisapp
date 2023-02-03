@@ -2,16 +2,16 @@ import 'package:get/get.dart';
 
 class OrderNowController extends GetxController
 {
-  RxString _deliverySystem = "FedEx".obs;
-  RxString _paymentSystem = "Apple Pay".obs;
+  // RxString _deliverySystem = "FedEx".obs;
+  RxString _paymentSystem = "Razorpay".obs;
 
-  String get deliverySys => _deliverySystem.value;
+  // String get deliverySys => _deliverySystem.value;
   String get paymentSys => _paymentSystem.value;
 
-  setDeliverySystem(String newDeliverySystem)
-  {
-    _deliverySystem.value = newDeliverySystem;
-  }
+  // setDeliverySystem(String newDeliverySystem)
+  // {
+  //   _deliverySystem.value = newDeliverySystem;
+  // }
 
   setPaymentSystem(String newPaymentSystem)
   {

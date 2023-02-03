@@ -25,6 +25,7 @@ class OrderDetailsScreen extends StatefulWidget
 
 class _OrderDetailsScreenState extends State<OrderDetailsScreen>
 {
+
   RxString _status = "new".obs;
   String get status => _status.value;
 
@@ -126,7 +127,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.orange,
         title: Text(
           DateFormat("dd MMMM, yyyy - hh:mm a").format(widget.clickedOrderInfo!.dateTime!),
           style: const TextStyle(fontSize: 14),
@@ -183,11 +184,21 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
               displayClickedOrderItems(),
 
               const SizedBox(height: 16,),
-
+//phoneNumber
+              showTitleText("Full Name:"),
+              const SizedBox(height: 8,),
+              showContentText(widget.clickedOrderInfo!.user_name!),
+              const SizedBox(height: 26,),
               //phoneNumber
               showTitleText("Phone Number:"),
               const SizedBox(height: 8,),
               showContentText(widget.clickedOrderInfo!.phoneNumber!),
+              const SizedBox(height: 26,),
+
+              //email id
+              showTitleText("Email Id:"),
+              const SizedBox(height: 8,),
+              showContentText(widget.clickedOrderInfo!.user_email!),
 
               const SizedBox(height: 26,),
 
@@ -198,12 +209,12 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
 
               const SizedBox(height: 26,),
 
-              //delivery
-              showTitleText("Delivery System:"),
-              const SizedBox(height: 8,),
-              showContentText(widget.clickedOrderInfo!.deliverySystem!),
-
-              const SizedBox(height: 26,),
+              // //delivery
+              // showTitleText("Delivery System:"),
+              // const SizedBox(height: 8,),
+              // showContentText(widget.clickedOrderInfo!.deliverySystem!),
+              //
+              // const SizedBox(height: 26,),
 
               //payment
               showTitleText("Payment System:"),
@@ -225,26 +236,32 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
               showContentText(widget.clickedOrderInfo!.totalAmount.toString()),
 
               const SizedBox(height: 26,),
+//Order placed on
+              showTitleText("Order Placed On:"),
+              const SizedBox(height: 8,),
+              showContentText(DateFormat("dd MMMM, yyyy - hh:mm a").format(widget.clickedOrderInfo!.dateTime!),),
+
+              const SizedBox(height: 26,),
 
               //payment proof
-              showTitleText("Proof of Payment/Transaction:"),
-              const SizedBox(height: 8,),
-              FadeInImage(
-                width: MediaQuery.of(context).size.width * 0.8,
-                fit: BoxFit.fitWidth,
-                placeholder: const AssetImage("images/place_holder.png"),
-                image: NetworkImage(
-                  API.hostImages + widget.clickedOrderInfo!.image!,
-                ),
-                imageErrorBuilder: (context, error, stackTraceError)
-                {
-                  return const Center(
-                    child: Icon(
-                      Icons.broken_image_outlined,
-                    ),
-                  );
-                },
-              ),
+              // showTitleText("Proof of Payment/Transaction:"),
+              // const SizedBox(height: 8,),
+              // FadeInImage(
+              //   width: MediaQuery.of(context).size.width * 0.8,
+              //   fit: BoxFit.fitWidth,
+              //   placeholder: const AssetImage("images/place_holder.png"),
+              //   image: NetworkImage(
+              //     API.hostImages + widget.clickedOrderInfo!.image!,
+              //   ),
+              //   imageErrorBuilder: (context, error, stackTraceError)
+              //   {
+              //     return const Center(
+              //       child: Icon(
+              //         Icons.broken_image_outlined,
+              //       ),
+              //     );
+              //   },
+              // ),
 
             ],
           ),

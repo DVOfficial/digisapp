@@ -2,8 +2,10 @@ class Order
 {
   int? order_id;
   int? user_id;
+  String? user_name;
+  String? user_email;
   String? selectedItems;
-  String? deliverySystem;
+  // String? deliverySystem;
   String? paymentSystem;
   String? note;
   double? totalAmount;
@@ -16,8 +18,10 @@ class Order
   Order({
     this.order_id,
     this.user_id,
+    this.user_name,
+    this.user_email,
     this.selectedItems,
-    this.deliverySystem,
+    // this.deliverySystem,
     this.paymentSystem,
     this.note,
     this.totalAmount,
@@ -31,8 +35,10 @@ class Order
   factory Order.fromJson(Map<String, dynamic> json)=> Order(
     order_id: int.parse(json["order_id"]),
     user_id: int.parse(json["user_id"]),
+    user_name: json["user_name"],
+    user_email: json["user_email"],
     selectedItems: json["selectedItems"],
-    deliverySystem: json["deliverySystem"],
+    // deliverySystem: json["deliverySystem"],
     paymentSystem: json["paymentSystem"],
     note: json["note"],
     totalAmount: double.parse(json["totalAmount"]),
@@ -43,19 +49,21 @@ class Order
     phoneNumber: json["phoneNumber"],
   );
 
-  Map<String, dynamic> toJson(String imageSelectedBase64)=>
+  Map<String, dynamic> toJson()=>
       {
         "order_id": order_id.toString(),
         "user_id": user_id.toString(),
+        "user_name": user_name,
+        "user_email": user_email,
         "selectedItems": selectedItems,
-        "deliverySystem": deliverySystem,
+        // "deliverySystem": deliverySystem,
         "paymentSystem": paymentSystem,
         "note": note,
         "totalAmount": totalAmount!.toStringAsFixed(2),
-        "image": image,
+        // "image": image,
         "status": status,
         "shipmentAddress": shipmentAddress,
         "phoneNumber": phoneNumber,
-        "imageFile": imageSelectedBase64,
+        // "imageFile": imageSelectedBase64,
       };
 }

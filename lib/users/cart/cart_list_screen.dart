@@ -12,6 +12,7 @@ import '../item/item_details_screen.dart';
 import '../model/cart.dart';
 import '../model/clothes.dart';
 import '../order/order_now_screen.dart';
+import '../order/order_now_screen1.dart';
 import '../userPreferences/current_user.dart';
 
 
@@ -614,7 +615,8 @@ class _CartListScreenState extends State<CartListScreen>
                     onTap: ()
                     {
                       cartListController.selectedItemList.length > 0
-                          ? Get.to(OrderNowScreen(
+                          ? Get.to(OrderNowScreen1(
+                          // ? Get.to(OrderNowScreen(
                               selectedCartListItemsInfo: getSelectedCartListItemsInformation(),
                               totalAmount: cartListController.total,
                               selectedCartIDs: cartListController.selectedItemList,
