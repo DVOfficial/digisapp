@@ -9,10 +9,12 @@ import 'package:http/http.dart' as http;
 import '../../api_connection/api_connection.dart';
 import '../controllers/cart_list_controller.dart';
 import '../item/item_details_screen.dart';
+import '../item/item_details_screen1.dart';
 import '../model/cart.dart';
 import '../model/clothes.dart';
 import '../order/order_now_screen.dart';
 import '../order/order_now_screen1.dart';
+import '../order/order_now_screen2.dart';
 import '../userPreferences/current_user.dart';
 
 
@@ -375,7 +377,7 @@ class _CartListScreenState extends State<CartListScreen>
                             child: GestureDetector(
                               onTap: ()
                               {
-                                Get.to(ItemDetailsScreen(itemInfo: clothesModel));
+                                Get.to(ItemDetailsScreen1(itemInfo: clothesModel));
                               },
                               child: Container(
                                 margin: EdgeInsets.fromLTRB(
@@ -430,7 +432,8 @@ class _CartListScreenState extends State<CartListScreen>
                                                 //color size
                                                 Expanded(
                                                   child: Text(
-                                                    "Color: ₹{cartModel.color!.replaceAll('[', '').replaceAll(']', '')}" + "\n" + "Size: ₹{cartModel.size!.replaceAll('[', '').replaceAll(']', '')}",
+                                                    "Color: "+cartModel.color!.replaceAll('[', '').replaceAll(']', '')+
+                                                        "\n" + "Size: "+cartModel.size!.replaceAll('[', '').replaceAll(']', ''),
                                                     maxLines: 3,
                                                     overflow: TextOverflow.ellipsis,
                                                     style: const TextStyle(
@@ -615,7 +618,8 @@ class _CartListScreenState extends State<CartListScreen>
                     onTap: ()
                     {
                       cartListController.selectedItemList.length > 0
-                          ? Get.to(OrderNowScreen1(
+                          ? Get.to(OrderNowScreen2(
+                          // ? Get.to(OrderNowScreen1(
                           // ? Get.to(OrderNowScreen(
                               selectedCartListItemsInfo: getSelectedCartListItemsInformation(),
                               totalAmount: cartListController.total,

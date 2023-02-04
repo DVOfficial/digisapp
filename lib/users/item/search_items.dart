@@ -10,6 +10,7 @@ import 'package:http/http.dart' as http;
 
 import '../model/clothes.dart';
 import 'item_details_screen.dart';
+import 'item_details_screen1.dart';
 
 
 class SearchItems extends StatefulWidget
@@ -195,7 +196,7 @@ class _SearchItemsState extends State<SearchItems>
                 return GestureDetector(
                   onTap: ()
                   {
-                    Get.to(ItemDetailsScreen(itemInfo: eachClothItemRecord));
+                    Get.to(ItemDetailsScreen1(itemInfo: eachClothItemRecord));
                   },
                   child: Container(
                     margin: EdgeInsets.fromLTRB(

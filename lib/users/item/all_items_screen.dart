@@ -13,6 +13,7 @@ import '../item/item_details_screen.dart';
 import '../item/search_items.dart';
 import '../model/category.dart';
 import '../model/clothes.dart';
+import 'item_details_screen1.dart';
 
 
 class AllItemsScreen extends StatelessWidget
@@ -152,7 +153,7 @@ class AllItemsScreen extends StatelessWidget
                 return GestureDetector(
                   onTap: ()
                   {
-                    Get.to(ItemDetailsScreen(itemInfo: clickedClothItem));
+                    Get.to(ItemDetailsScreen1(itemInfo: clickedClothItem));
                   },
                   child: Container(
                     margin: EdgeInsets.fromLTRB(

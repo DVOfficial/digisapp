@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import '../../api_connection/api_connection.dart';
 import '../item/item_details_screen.dart';
+import '../item/item_details_screen1.dart';
 import '../model/clothes.dart';
 import '../model/favorite.dart';
 import '../userPreferences/current_user.dart';
@@ -144,7 +145,7 @@ class FavoritesFragmentScreen extends StatelessWidget
                 return GestureDetector(
                   onTap: ()
                   {
-                    Get.to(ItemDetailsScreen(itemInfo: clickedClothItem));
+                    Get.to(ItemDetailsScreen1(itemInfo: clickedClothItem));
                   },
                   child: Container(
                     margin: EdgeInsets.fromLTRB(

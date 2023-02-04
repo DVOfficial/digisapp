@@ -10,6 +10,7 @@ import 'package:http/http.dart' as http;
 import '../../api_connection/api_connection.dart';
 import '../cart/cart_list_screen.dart';
 import '../item/item_details_screen.dart';
+import '../item/item_details_screen1.dart';
 import '../item/search_items.dart';
 import '../model/clothes.dart';
 
@@ -224,7 +225,7 @@ class HomeFragmentScreen extends StatelessWidget
                 return GestureDetector(
                   onTap: ()
                   {
-                    Get.to(ItemDetailsScreen(itemInfo: eachClothItemData));
+                    Get.to(ItemDetailsScreen1(itemInfo: eachClothItemData));
                   },
                   child: Container(
                     width: 200,
@@ -401,7 +402,7 @@ class HomeFragmentScreen extends StatelessWidget
                 return GestureDetector(
                   onTap: ()
                   {
-                    Get.to(ItemDetailsScreen(itemInfo: eachClothItemRecord));
+                    Get.to(ItemDetailsScreen1(itemInfo: eachClothItemRecord));
                   },
                   child: Container(
                     margin: EdgeInsets.fromLTRB(
