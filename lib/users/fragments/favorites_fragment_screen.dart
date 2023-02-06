@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 import '../../api_connection/api_connection.dart';
 import '../item/item_details_screen.dart';
 import '../item/item_details_screen1.dart';
+import '../model/Clothes1.dart';
 import '../model/clothes.dart';
 import '../model/favorite.dart';
 import '../userPreferences/current_user.dart';
@@ -130,22 +131,23 @@ class FavoritesFragmentScreen extends StatelessWidget
               {
                 Favorite eachFavoriteItemRecord = dataSnapShot.data![index];
 
-                Clothes clickedClothItem = Clothes(
+                Clothes1 clickedClothItem = Clothes1(
                   item_id: eachFavoriteItemRecord.item_id,
-                  colors: eachFavoriteItemRecord.colors,
+                  // colors: eachFavoriteItemRecord.colors,
                   image: eachFavoriteItemRecord.image,
                   name: eachFavoriteItemRecord.name,
+                  subtext: eachFavoriteItemRecord.subtext,
                   price: eachFavoriteItemRecord.price,
-                  rating: eachFavoriteItemRecord.rating,
+                  // rating: eachFavoriteItemRecord.rating,
                   sizes: eachFavoriteItemRecord.sizes,
                   description: eachFavoriteItemRecord.description,
-                  tags: eachFavoriteItemRecord.tags,
+                  // tags: eachFavoriteItemRecord.tags,
                 );
 
                 return GestureDetector(
                   onTap: ()
                   {
-                    Get.to(ItemDetailsScreen1(itemInfo: clickedClothItem));
+                    Get.to(ItemDetailsScreen(itemInfo: clickedClothItem));
                   },
                   child: Container(
                     margin: EdgeInsets.fromLTRB(
@@ -218,7 +220,7 @@ class FavoritesFragmentScreen extends StatelessWidget
 
                                 //tags
                                 Text(
-                                  "Tags: \n" + eachFavoriteItemRecord.tags.toString().replaceAll("[", "").replaceAll("]", ""),
+                                  eachFavoriteItemRecord.subtext.toString().replaceAll("[", "").replaceAll("]", ""),
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                   style: const TextStyle(

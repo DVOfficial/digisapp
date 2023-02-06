@@ -8,7 +8,7 @@ import '../../api_connection/api_connection.dart';
 import '../cart/cart_list_screen.dart';
 import 'package:http/http.dart' as http;
 
-import '../model/clothes.dart';
+import '../model/Clothes1.dart';
 import 'item_details_screen.dart';
 import 'item_details_screen1.dart';
 
@@ -30,9 +30,9 @@ class _SearchItemsState extends State<SearchItems>
   TextEditingController searchController = TextEditingController();
 
 
-  Future<List<Clothes>> readSearchRecordsFound() async
+  Future<List<Clothes1>> readSearchRecordsFound() async
   {
-    List<Clothes> clothesSearchList = [];
+    List<Clothes1> Clothes1SearchList = [];
 
     if(searchController.text != "")
     {
@@ -54,7 +54,7 @@ class _SearchItemsState extends State<SearchItems>
           {
             (responseBodyOfSearchItems['itemsFoundData'] as List).forEach((eachItemData)
             {
-              clothesSearchList.add(Clothes.fromJson(eachItemData));
+              Clothes1SearchList.add(Clothes1.fromJson(eachItemData));
             });
           }
         }
@@ -69,7 +69,7 @@ class _SearchItemsState extends State<SearchItems>
       }
     }
 
-    return clothesSearchList;
+    return Clothes1SearchList;
   }
 
   @override
@@ -166,7 +166,7 @@ class _SearchItemsState extends State<SearchItems>
   {
     return FutureBuilder(
         future: readSearchRecordsFound(),
-        builder: (context, AsyncSnapshot<List<Clothes>> dataSnapShot)
+        builder: (context, AsyncSnapshot<List<Clothes1>> dataSnapShot)
         {
           if(dataSnapShot.connectionState == ConnectionState.waiting)
           {
@@ -191,12 +191,12 @@ class _SearchItemsState extends State<SearchItems>
               scrollDirection: Axis.vertical,
               itemBuilder: (context, index)
               {
-                Clothes eachClothItemRecord = dataSnapShot.data![index];
+                Clothes1 eachClothItemRecord = dataSnapShot.data![index];
 
                 return GestureDetector(
                   onTap: ()
                   {
-                    Get.to(ItemDetailsScreen1(itemInfo: eachClothItemRecord));
+                    Get.to(ItemDetailsScreen(itemInfo: eachClothItemRecord));
                   },
                   child: Container(
                     margin: EdgeInsets.fromLTRB(
@@ -269,7 +269,7 @@ class _SearchItemsState extends State<SearchItems>
 
                                 //tags
                                 Text(
-                                  "Tags: \n" + eachClothItemRecord.tags.toString().replaceAll("[", "").replaceAll("]", ""),
+                                  "\n" + eachClothItemRecord.subtext.toString().replaceAll("[", "").replaceAll("]", ""),
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                   style: const TextStyle(
@@ -283,7 +283,7 @@ class _SearchItemsState extends State<SearchItems>
                           ),
                         ),
 
-                        //image clothes
+                        //image Clothes1
                         ClipRRect(
                           borderRadius: const BorderRadius.only(
                             topRight: Radius.circular(20),

@@ -29,6 +29,8 @@ class API
   static const getTrendingMostPopularClothes = "$hostClothes/trending.php";
   static const getAllClothes = "$hostClothes/all.php";
   static const getAllCategory = "$hostClothes/category.php";
+  static const getAllCategoryItems = "$hostClothes/categorywiseitems.php";
+
 
   //cart
   static const addToCart = "$hostCart/add.php";

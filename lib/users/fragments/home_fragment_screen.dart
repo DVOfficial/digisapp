@@ -12,22 +12,22 @@ import '../cart/cart_list_screen.dart';
 import '../item/item_details_screen.dart';
 import '../item/item_details_screen1.dart';
 import '../item/search_items.dart';
-import '../model/clothes.dart';
+import '../model/Clothes1.dart';
 
 
 class HomeFragmentScreen extends StatelessWidget
 {
   TextEditingController searchController = TextEditingController();
 
-
-  Future<List<Clothes>> getTrendingClothItems() async
+//fetching trending list from phpmysql
+  Future<List<Clothes1>> getTrendingClothItems() async
   {
-    List<Clothes> trendingClothItemsList = [];
+    List<Clothes1> trendingClothItemsList = [];
 
     try
     {
       var res = await http.post(
-        Uri.parse(API.getTrendingMostPopularClothes)
+          Uri.parse(API.getTrendingMostPopularClothes)
       );
 
       if(res.statusCode == 200)
@@ -37,7 +37,7 @@ class HomeFragmentScreen extends StatelessWidget
         {
           (responseBodyOfTrending["clothItemsData"] as List).forEach((eachRecord)
           {
-            trendingClothItemsList.add(Clothes.fromJson(eachRecord));
+            trendingClothItemsList.add(Clothes1.fromJson(eachRecord));
           });
         }
       }
@@ -54,9 +54,10 @@ class HomeFragmentScreen extends StatelessWidget
     return trendingClothItemsList;
   }
 
-  Future<List<Clothes>> getAllClothItems() async
+  //fetching allitems list from phpmysql
+  Future<List<Clothes1>> getAllClothItems() async
   {
-    List<Clothes> allClothItemsList = [];
+    List<Clothes1> allClothItemsList = [];
 
     try
     {
@@ -66,12 +67,12 @@ class HomeFragmentScreen extends StatelessWidget
 
       if(res.statusCode == 200)
       {
-        var responseBodyOfAllClothes = jsonDecode(res.body);
-        if(responseBodyOfAllClothes["success"] == true)
+        var responseBodyOfAllClothes1 = jsonDecode(res.body);
+        if(responseBodyOfAllClothes1["success"] == true)
         {
-          (responseBodyOfAllClothes["clothItemsData"] as List).forEach((eachRecord)
+          (responseBodyOfAllClothes1["clothItemsData"] as List).forEach((eachRecord)
           {
-            allClothItemsList.add(Clothes.fromJson(eachRecord));
+            allClothItemsList.add(Clothes1.fromJson(eachRecord));
           });
         }
       }
@@ -86,6 +87,7 @@ class HomeFragmentScreen extends StatelessWidget
     }
 
     return allClothItemsList;
+
   }
 
   @override
@@ -138,6 +140,7 @@ class HomeFragmentScreen extends StatelessWidget
     );
   }
 
+//Search bar widget
   Widget showSearchBarWidget()
   {
     return Padding(
@@ -192,11 +195,12 @@ class HomeFragmentScreen extends StatelessWidget
     );
   }
 
+  //trending widget
   Widget trendingMostPopularClothItemWidget(context)
   {
     return FutureBuilder(
       future: getTrendingClothItems(),
-      builder: (context, AsyncSnapshot<List<Clothes>> dataSnapShot)
+      builder: (context, AsyncSnapshot<List<Clothes1>> dataSnapShot)
       {
         if(dataSnapShot.connectionState == ConnectionState.waiting)
         {
@@ -221,11 +225,11 @@ class HomeFragmentScreen extends StatelessWidget
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index)
               {
-                Clothes eachClothItemData = dataSnapShot.data![index];
+                Clothes1 eachClothItemData = dataSnapShot.data![index];
                 return GestureDetector(
                   onTap: ()
                   {
-                    Get.to(ItemDetailsScreen1(itemInfo: eachClothItemData));
+                    Get.to(ItemDetailsScreen(itemInfo: eachClothItemData));
                   },
                   child: Container(
                     width: 200,
@@ -318,26 +322,26 @@ class HomeFragmentScreen extends StatelessWidget
                               Row(
                                 children: [
 
-                                  RatingBar.builder(
-                                    initialRating: eachClothItemData.rating!,
-                                    minRating: 1,
-                                    direction: Axis.horizontal,
-                                    allowHalfRating: true,
-                                    itemCount: 5,
-                                    itemBuilder: (context, c)=> const Icon(
-                                      Icons.star,
-                                      color: Colors.amber,
-                                    ),
-                                    onRatingUpdate: (updateRating){},
-                                    ignoreGestures: true,
-                                    unratedColor: Colors.grey,
-                                    itemSize: 20,
-                                  ),
+                                  //     RatingBar.builder(
+                                  //       initialRating: eachClothItemData.rating!,
+                                  //       minRating: 1,
+                                  //       direction: Axis.horizontal,
+                                  //       allowHalfRating: true,
+                                  //       itemCount: 5,
+                                  //       itemBuilder: (context, c)=> const Icon(
+                                  //         Icons.star,
+                                  //         color: Colors.amber,
+                                  //       ),
+                                  //       onRatingUpdate: (updateRating){},
+                                  //       ignoreGestures: true,
+                                  //       unratedColor: Colors.grey,
+                                  //       itemSize: 20,
+                                  //     ),
 
                                   const SizedBox(width: 8,),
 
                                   Text(
-                                    "(" + eachClothItemData.rating.toString() + ")",
+                                    "(" + eachClothItemData.subtext.toString() + ")",
                                     style: const TextStyle(
                                       color: Colors.grey,
                                     ),
@@ -368,11 +372,12 @@ class HomeFragmentScreen extends StatelessWidget
     );
   }
 
+  //all item widget
   allItemWidget(context)
   {
     return FutureBuilder(
-      future: getAllClothItems(),
-        builder: (context, AsyncSnapshot<List<Clothes>> dataSnapShot)
+        future: getAllClothItems(),
+        builder: (context, AsyncSnapshot<List<Clothes1>> dataSnapShot)
         {
           if(dataSnapShot.connectionState == ConnectionState.waiting)
           {
@@ -397,12 +402,12 @@ class HomeFragmentScreen extends StatelessWidget
               scrollDirection: Axis.vertical,
               itemBuilder: (context, index)
               {
-                Clothes eachClothItemRecord = dataSnapShot.data![index];
+                Clothes1 eachClothItemRecord = dataSnapShot.data![index];
 
                 return GestureDetector(
                   onTap: ()
                   {
-                    Get.to(ItemDetailsScreen1(itemInfo: eachClothItemRecord));
+                    Get.to(ItemDetailsScreen(itemInfo: eachClothItemRecord));
                   },
                   child: Container(
                     margin: EdgeInsets.fromLTRB(
@@ -473,23 +478,23 @@ class HomeFragmentScreen extends StatelessWidget
 
                                 const SizedBox(height: 16,),
 
-                                //tags
-                                Text(
-                                  "Tags: \n" + eachClothItemRecord.tags.toString().replaceAll("[", "").replaceAll("]", ""),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.grey,
-                                  ),
-                                ),
+                                // //tags
+                                // Text(
+                                //   "Tags: \n" + eachClothItemRecord.tags.toString().replaceAll("[", "").replaceAll("]", ""),
+                                //   maxLines: 2,
+                                //   overflow: TextOverflow.ellipsis,
+                                //   style: const TextStyle(
+                                //     fontSize: 12,
+                                //     color: Colors.grey,
+                                //   ),
+                                // ),
 
                               ],
                             ),
                           ),
                         ),
 
-                        //image clothes
+                        //image Clothes1
                         ClipRRect(
                           borderRadius: const BorderRadius.only(
                             topRight: Radius.circular(20),

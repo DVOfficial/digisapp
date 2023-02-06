@@ -693,7 +693,7 @@ class _OrderNowScreen2State extends State<OrderNowScreen2> {
 
                       //size + color
                       Text(
-                        eachSelectedItem["size"].replaceAll("[", "").replaceAll("]", "") + "\n" + eachSelectedItem["color"].replaceAll("[", "").replaceAll("]", ""),
+                        eachSelectedItem["size"],
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(

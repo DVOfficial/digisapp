@@ -10,6 +10,7 @@ import '../../api_connection/api_connection.dart';
 import '../controllers/cart_list_controller.dart';
 import '../item/item_details_screen.dart';
 import '../item/item_details_screen1.dart';
+import '../model/Clothes1.dart';
 import '../model/cart.dart';
 import '../model/clothes.dart';
 import '../order/order_now_screen.dart';
@@ -40,11 +41,11 @@ class _CartListScreenState extends State<CartListScreen>
     try
     {
       var res = await http.post(
-        Uri.parse(API.getCartList),
-        body:
-        {
-          "currentOnlineUserID": currentOnlineUser.user.user_id.toString(),
-        }
+          Uri.parse(API.getCartList),
+          body:
+          {
+            "currentOnlineUserID": currentOnlineUser.user.user_id.toString(),
+          }
       );
 
       if (res.statusCode == 200)
@@ -100,11 +101,11 @@ class _CartListScreenState extends State<CartListScreen>
     try
     {
       var res = await http.post(
-        Uri.parse(API.deleteSelectedItemsFromCartList),
-        body:
-        {
-          "cart_id": cartID.toString(),
-        }
+          Uri.parse(API.deleteSelectedItemsFromCartList),
+          body:
+          {
+            "cart_id": cartID.toString(),
+          }
       );
 
       if(res.statusCode == 200)
@@ -179,7 +180,7 @@ class _CartListScreenState extends State<CartListScreen>
             "item_id": selectedCartListItem.item_id,
             "name": selectedCartListItem.name,
             'image': selectedCartListItem.image,
-            'color': selectedCartListItem.color,
+            // 'color': selectedCartListItem.color,
             'size': selectedCartListItem.size,
             'quantity': selectedCartListItem.quantity,
             'totalAmount': selectedCartListItem.price! * selectedCartListItem.quantity!,
@@ -208,359 +209,361 @@ class _CartListScreenState extends State<CartListScreen>
       appBar: AppBar(
         backgroundColor: Colors.black,
         title: const Text(
-          "My Cart"
+            "My Cart"
         ),
         actions: [
 
           //to select all items
           Obx(()=>
-            IconButton(
-              onPressed: ()
-              {
-                cartListController.setIsSelectedAllItems();
-                cartListController.clearAllSelectedItems();
-
-                if(cartListController.isSelectedAll)
+              IconButton(
+                onPressed: ()
                 {
-                  cartListController.cartList.forEach((eachItem)
-                  {
-                    cartListController.addSelectedItem(eachItem.cart_id!);
-                  });
-                }
+                  cartListController.setIsSelectedAllItems();
+                  cartListController.clearAllSelectedItems();
 
-                calculateTotalAmount();
-              },
-              icon: Icon(
-                cartListController.isSelectedAll
-                    ? Icons.check_box
-                    : Icons.check_box_outline_blank,
-                color: cartListController.isSelectedAll
-                    ? Colors.white
-                    : Colors.grey,
+                  if(cartListController.isSelectedAll)
+                  {
+                    cartListController.cartList.forEach((eachItem)
+                    {
+                      cartListController.addSelectedItem(eachItem.cart_id!);
+                    });
+                  }
+
+                  calculateTotalAmount();
+                },
+                icon: Icon(
+                  cartListController.isSelectedAll
+                      ? Icons.check_box
+                      : Icons.check_box_outline_blank,
+                  color: cartListController.isSelectedAll
+                      ? Colors.white
+                      : Colors.grey,
+                ),
               ),
-            ),
           ),
 
           //to delete selected item/items
           GetBuilder(
-            init: CartListController(),
-            builder: (c)
-            {
-              if(cartListController.selectedItemList.length > 0)
+              init: CartListController(),
+              builder: (c)
               {
-                return IconButton(
-                  onPressed: () async
-                  {
-                    var responseFromDialogBox = await Get.dialog(
-                      AlertDialog(
-                        backgroundColor: Colors.grey,
-                        title: const Text("Delete"),
-                        content: const Text("Are you sure to Delete selected items from your Cart List?"),
-                        actions:
-                        [
-                          TextButton(
-                            onPressed: ()
-                            {
-                              Get.back();
-                            },
-                            child: const Text(
-                              "No",
-                              style: TextStyle(
-                                color: Colors.black,
-                              ),
-                            ),
-                          ),
-                          TextButton(
-                            onPressed: ()
-                            {
-                              Get.back(result: "yesDelete");
-                            },
-                            child: const Text(
-                              "Yes",
-                              style: TextStyle(
-                                color: Colors.black,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                    if(responseFromDialogBox == "yesDelete")
+                if(cartListController.selectedItemList.length > 0)
+                {
+                  return IconButton(
+                    onPressed: () async
                     {
-                      cartListController.selectedItemList.forEach((selectedItemUserCartID)
+                      var responseFromDialogBox = await Get.dialog(
+                        AlertDialog(
+                          backgroundColor: Colors.grey,
+                          title: const Text("Delete"),
+                          content: const Text("Are you sure to Delete selected items from your Cart List?"),
+                          actions:
+                          [
+                            TextButton(
+                              onPressed: ()
+                              {
+                                Get.back();
+                              },
+                              child: const Text(
+                                "No",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                            TextButton(
+                              onPressed: ()
+                              {
+                                Get.back(result: "yesDelete");
+                              },
+                              child: const Text(
+                                "Yes",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                      if(responseFromDialogBox == "yesDelete")
                       {
-                        //delete selected items now
-                        deleteSelectedItemsFromUserCartList(selectedItemUserCartID);
-                      });
-                    }
+                        cartListController.selectedItemList.forEach((selectedItemUserCartID)
+                        {
+                          //delete selected items now
+                          deleteSelectedItemsFromUserCartList(selectedItemUserCartID);
+                        });
+                      }
 
-                    calculateTotalAmount();
-                  },
-                  icon: const Icon(
-                    Icons.delete_sweep,
-                    size: 26,
-                    color: Colors.redAccent,
-                  ),
-                );
+                      calculateTotalAmount();
+                    },
+                    icon: const Icon(
+                      Icons.delete_sweep,
+                      size: 26,
+                      color: Colors.redAccent,
+                    ),
+                  );
+                }
+                else
+                {
+                  return Container();
+                }
               }
-              else
-              {
-                return Container();
-              }
-            }
           ),
 
         ],
       ),
       body: Obx(()=>
-          cartListController.cartList.length > 0
-              ? ListView.builder(
-                  itemCount: cartListController.cartList.length,
-                  scrollDirection: Axis.vertical,
-                  itemBuilder: (context, index)
+      cartListController.cartList.length > 0
+          ? ListView.builder(
+        itemCount: cartListController.cartList.length,
+        scrollDirection: Axis.vertical,
+        itemBuilder: (context, index)
+        {
+          Cart cartModel = cartListController.cartList[index];
+
+          Clothes1 clothesModel = Clothes1(
+            item_id: cartModel.item_id,
+            // colors: cartModel.colors,
+            image: cartModel.image,
+            name: cartModel.name,
+            price: cartModel.price,
+            // rating: cartModel.rating,
+            sizes: cartModel.sizes,
+            description: cartModel.description,
+            // tags: cartModel.tags,
+          );
+
+          return SizedBox(
+            width: MediaQuery.of(context).size.width,
+            child: Row(
+              children: [
+
+                //check box
+                GetBuilder(
+                  init: CartListController(),
+                  builder: (c)
                   {
-                    Cart cartModel = cartListController.cartList[index];
+                    return IconButton(
+                      onPressed: ()
+                      {
+                        if(cartListController.selectedItemList.contains(cartModel.cart_id))
+                        {
+                          cartListController.deleteSelectedItem(cartModel.cart_id!);
+                        }
+                        else
+                        {
+                          cartListController.addSelectedItem(cartModel.cart_id!);
+                        }
 
-                    Clothes clothesModel = Clothes(
-                      item_id: cartModel.item_id,
-                      colors: cartModel.colors,
-                      image: cartModel.image,
-                      name: cartModel.name,
-                      price: cartModel.price,
-                      rating: cartModel.rating,
-                      sizes: cartModel.sizes,
-                      description: cartModel.description,
-                      tags: cartModel.tags,
+                        calculateTotalAmount();
+                      },
+                      icon: Icon(
+                        cartListController.selectedItemList.contains(cartModel.cart_id)
+                            ? Icons.check_box
+                            : Icons.check_box_outline_blank,
+                        color: cartListController.isSelectedAll
+                            ? Colors.white
+                            : Colors.grey,
+                      ),
                     );
+                  },
+                ),
 
-                    return SizedBox(
-                      width: MediaQuery.of(context).size.width,
+                //name
+                //color size + price
+                //+ 2 -
+                //image
+                Expanded(
+                  child: GestureDetector(
+                    onTap: ()
+                    {
+                      Get.to(ItemDetailsScreen(itemInfo: clothesModel));
+                    },
+                    child: Container(
+                      margin: EdgeInsets.fromLTRB(
+                        0,
+                        index == 0 ? 16 : 8,
+                        16,
+                        index == cartListController.cartList.length - 1 ? 16 : 8,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: Colors.black,
+                        boxShadow:
+                        const [
+                          BoxShadow(
+                            offset: Offset(0, 0),
+                            blurRadius: 6,
+                            color: Colors.white,
+                          ),
+                        ],
+                      ),
                       child: Row(
                         children: [
-
-                          //check box
-                          GetBuilder(
-                            init: CartListController(),
-                            builder: (c)
-                            {
-                              return IconButton(
-                                onPressed: ()
-                                {
-                                  if(cartListController.selectedItemList.contains(cartModel.cart_id))
-                                  {
-                                    cartListController.deleteSelectedItem(cartModel.cart_id!);
-                                  }
-                                  else
-                                  {
-                                    cartListController.addSelectedItem(cartModel.cart_id!);
-                                  }
-
-                                  calculateTotalAmount();
-                                },
-                                icon: Icon(
-                                  cartListController.selectedItemList.contains(cartModel.cart_id)
-                                      ? Icons.check_box
-                                      : Icons.check_box_outline_blank,
-                                  color: cartListController.isSelectedAll
-                                      ? Colors.white
-                                      : Colors.grey,
-                                ),
-                              );
-                            },
-                          ),
 
                           //name
                           //color size + price
                           //+ 2 -
-                          //image
                           Expanded(
-                            child: GestureDetector(
-                              onTap: ()
-                              {
-                                Get.to(ItemDetailsScreen1(itemInfo: clothesModel));
-                              },
-                              child: Container(
-                                margin: EdgeInsets.fromLTRB(
-                                  0,
-                                  index == 0 ? 16 : 8,
-                                  16,
-                                  index == cartListController.cartList.length - 1 ? 16 : 8,
-                                ),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20),
-                                  color: Colors.black,
-                                  boxShadow:
-                                  const [
-                                    BoxShadow(
-                                      offset: Offset(0, 0),
-                                      blurRadius: 6,
-                                      color: Colors.white,
+                            child: Padding(
+                              padding: const EdgeInsets.all(10),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+
+                                  //name
+                                  Text(
+                                    clothesModel.name.toString(),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                      fontSize: 18,
+                                      color: Colors.grey,
+                                      fontWeight: FontWeight.bold,
                                     ),
-                                  ],
-                                ),
-                                child: Row(
-                                  children: [
+                                  ),
 
-                                    //name
-                                    //color size + price
-                                    //+ 2 -
-                                    Expanded(
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(10),
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
+                                  const SizedBox(height: 20),
 
-                                            //name
-                                            Text(
-                                              clothesModel.name.toString(),
-                                              maxLines: 2,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: const TextStyle(
-                                                fontSize: 18,
-                                                color: Colors.grey,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
+                                  //color size + price
+                                  Row(
+                                    children: [
 
-                                            const SizedBox(height: 20),
-
-                                            //color size + price
-                                            Row(
-                                              children: [
-
-                                                //color size
-                                                Expanded(
-                                                  child: Text(
-                                                    "Color: "+cartModel.color!.replaceAll('[', '').replaceAll(']', '')+
-                                                        "\n" + "Size: "+cartModel.size!.replaceAll('[', '').replaceAll(']', ''),
-                                                    maxLines: 3,
-                                                    overflow: TextOverflow.ellipsis,
-                                                    style: const TextStyle(
-                                                      color: Colors.white60,
-                                                    ),
-                                                  ),
-                                                ),
-
-                                                //price
-                                                Padding(
-                                                  padding: const EdgeInsets.only(
-                                                      left: 12,
-                                                      right: 12.0
-                                                  ),
-                                                  child: Text(
-                                                    "\₹" + clothesModel.price.toString(),
-                                                    style: const TextStyle(
-                                                      fontSize: 20,
-                                                      color: Colors.orangeAccent,
-                                                      fontWeight: FontWeight.bold,
-                                                    ),
-                                                  ),
-                                                ),
-
-                                              ],
-                                            ),
-
-                                            const SizedBox(height: 20),
-
-                                            //+ 2 -
-                                            Row(
-                                              crossAxisAlignment: CrossAxisAlignment.center,
-                                              children: [
-
-                                                //-
-                                                IconButton(
-                                                  onPressed: ()
-                                                  {
-                                                    if(cartModel.quantity! - 1 >= 1)
-                                                    {
-                                                      updateQuantityInUserCart(
-                                                        cartModel.cart_id!,
-                                                        cartModel.quantity! - 1,
-                                                      );
-                                                    }
-                                                  },
-                                                  icon: const Icon(
-                                                    Icons.remove_circle_outline,
-                                                    color: Colors.grey,
-                                                    size: 30,
-                                                  ),
-                                                ),
-
-                                                const SizedBox(width: 10,),
-
-                                                Text(
-                                                  cartModel.quantity.toString(),
-                                                  style: const TextStyle(
-                                                    color: Colors.orangeAccent,
-                                                    fontSize: 20,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-
-                                                const SizedBox(width: 10,),
-
-                                                //+
-                                                IconButton(
-                                                  onPressed: ()
-                                                  {
-                                                    updateQuantityInUserCart(
-                                                      cartModel.cart_id!,
-                                                      cartModel.quantity! + 1,
-                                                    );
-                                                  },
-                                                  icon: const Icon(
-                                                    Icons.add_circle_outline,
-                                                    color: Colors.grey,
-                                                    size: 30,
-                                                  ),
-                                                ),
-
-                                              ],
-                                            ),
-                                          ],
+                                      //color size
+                                      Expanded(
+                                        child: Text(
+                                          // "Color: "+cartModel.color!.replaceAll('[', '').replaceAll(']', '')+
+                                          //     "\n" +
+                                          "Size: "+cartModel.size!,
+                                          // "Size: "+cartModel.size!.replaceAll('[', '').replaceAll(']', ''),
+                                          maxLines: 3,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: const TextStyle(
+                                            color: Colors.white60,
+                                          ),
                                         ),
                                       ),
-                                    ),
 
-                                    //item image
-                                    ClipRRect(
-                                      borderRadius: const BorderRadius.only(
-                                        topRight: Radius.circular(22),
-                                        bottomRight: Radius.circular(22),
-                                      ),
-                                      child: FadeInImage(
-                                        height: 185,
-                                        width: 150,
-                                        fit: BoxFit.cover,
-                                        placeholder: const AssetImage("images/place_holder.png"),
-                                        image: NetworkImage(
-                                          cartModel.image!,
+                                      //price
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 12,
+                                            right: 12.0
                                         ),
-                                        imageErrorBuilder: (context, error, stackTraceError)
+                                        child: Text(
+                                          "\₹" + clothesModel.price.toString(),
+                                          style: const TextStyle(
+                                            fontSize: 20,
+                                            color: Colors.orangeAccent,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+
+                                    ],
+                                  ),
+
+                                  const SizedBox(height: 20),
+
+                                  //+ 2 -
+                                  Row(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+
+                                      //-
+                                      IconButton(
+                                        onPressed: ()
                                         {
-                                          return const Center(
-                                            child: Icon(
-                                              Icons.broken_image_outlined,
-                                            ),
+                                          if(cartModel.quantity! - 1 >= 1)
+                                          {
+                                            updateQuantityInUserCart(
+                                              cartModel.cart_id!,
+                                              cartModel.quantity! - 1,
+                                            );
+                                          }
+                                        },
+                                        icon: const Icon(
+                                          Icons.remove_circle_outline,
+                                          color: Colors.grey,
+                                          size: 30,
+                                        ),
+                                      ),
+
+                                      const SizedBox(width: 10,),
+
+                                      Text(
+                                        cartModel.quantity.toString(),
+                                        style: const TextStyle(
+                                          color: Colors.orangeAccent,
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+
+                                      const SizedBox(width: 10,),
+
+                                      //+
+                                      IconButton(
+                                        onPressed: ()
+                                        {
+                                          updateQuantityInUserCart(
+                                            cartModel.cart_id!,
+                                            cartModel.quantity! + 1,
                                           );
                                         },
+                                        icon: const Icon(
+                                          Icons.add_circle_outline,
+                                          color: Colors.grey,
+                                          size: 30,
+                                        ),
                                       ),
-                                    ),
 
-                                  ],
-                                ),
+                                    ],
+                                  ),
+                                ],
                               ),
                             ),
                           ),
+
+                          //item image
+                          ClipRRect(
+                            borderRadius: const BorderRadius.only(
+                              topRight: Radius.circular(22),
+                              bottomRight: Radius.circular(22),
+                            ),
+                            child: FadeInImage(
+                              height: 185,
+                              width: 150,
+                              fit: BoxFit.cover,
+                              placeholder: const AssetImage("images/place_holder.png"),
+                              image: NetworkImage(
+                                cartModel.image!,
+                              ),
+                              imageErrorBuilder: (context, error, stackTraceError)
+                              {
+                                return const Center(
+                                  child: Icon(
+                                    Icons.broken_image_outlined,
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+
                         ],
                       ),
-                    );
-                  },
-                )
-              : const Center(
-                  child: Text("Cart is Empty"),
+                    ),
+                  ),
                 ),
+              ],
+            ),
+          );
+        },
+      )
+          : const Center(
+        child: Text("Cart is Empty"),
+      ),
       ),
       bottomNavigationBar: GetBuilder(
         init: CartListController(),
@@ -595,15 +598,15 @@ class _CartListScreenState extends State<CartListScreen>
                 ),
                 const SizedBox(width: 4),
                 Obx(()=>
-                  Text(
-                    "\₹ " + cartListController.total.toStringAsFixed(2),
-                    maxLines: 1,
-                    style: const TextStyle(
-                      color: Colors.white70,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
+                    Text(
+                      "\₹ " + cartListController.total.toStringAsFixed(2),
+                      maxLines: 1,
+                      style: const TextStyle(
+                        color: Colors.white70,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
                 ),
 
                 const Spacer(),
@@ -619,12 +622,12 @@ class _CartListScreenState extends State<CartListScreen>
                     {
                       cartListController.selectedItemList.length > 0
                           ? Get.to(OrderNowScreen2(
-                          // ? Get.to(OrderNowScreen1(
-                          // ? Get.to(OrderNowScreen(
-                              selectedCartListItemsInfo: getSelectedCartListItemsInformation(),
-                              totalAmount: cartListController.total,
-                              selectedCartIDs: cartListController.selectedItemList,
-                            ))
+                        // ? Get.to(OrderNowScreen1(
+                        // ? Get.to(OrderNowScreen(
+                        selectedCartListItemsInfo: getSelectedCartListItemsInformation(),
+                        totalAmount: cartListController.total,
+                        selectedCartIDs: cartListController.selectedItemList,
+                      ))
                           : null;
                     },
                     child: const Padding(

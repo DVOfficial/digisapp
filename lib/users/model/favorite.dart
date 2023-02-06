@@ -4,11 +4,12 @@ class Favorite
   int? user_id;
   int? item_id;
   String? name;
-  double? rating;
-  List<String>? tags;
+  String? subtext;
+  // double? rating;
+  // List<String>? tags;
   double? price;
-  List<String>? sizes;
-  List<String>? colors;
+  String? sizes;
+  // List<String>? colors;
   String? description;
   String? image;
 
@@ -17,11 +18,12 @@ class Favorite
     this.user_id,
     this.item_id,
     this.name,
-    this.rating,
-    this.tags,
+    this.subtext,
+    // this.rating,
+    // this.tags,
     this.price,
     this.sizes,
-    this.colors,
+    // this.colors,
     this.description,
     this.image,
   });
@@ -31,11 +33,13 @@ class Favorite
     user_id: int.parse(json['user_id']),
     item_id: int.parse(json['item_id']),
     name: json['name'],
-    rating: double.parse(json['rating']),
-    tags: json['tags'].toString().split(', '),
+    subtext: json['subtext'],
+    // rating: double.parse(json['rating']),
+    // tags: json['tags'].toString().split(', '),
     price: double.parse(json['price']),
-    sizes: json['sizes'].toString().split(', '),
-    colors: json['colors'].toString().split(', '),
+    sizes: (json['sizes']),
+    // sizes: json['sizes'].toString().split(', '),
+    // colors: json['colors'].toString().split(', '),
     description: json['description'],
     image: json['image'],
   );

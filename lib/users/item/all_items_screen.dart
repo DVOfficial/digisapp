@@ -9,10 +9,11 @@ import 'package:http/http.dart' as http;
 
 import '../../api_connection/api_connection.dart';
 import '../cart/cart_list_screen.dart';
+import '../controllers/category_controller.dart';
 import '../item/item_details_screen.dart';
 import '../item/search_items.dart';
 import '../model/category.dart';
-import '../model/clothes.dart';
+import '../model/Clothes1.dart';
 import 'item_details_screen1.dart';
 
 
@@ -20,18 +21,18 @@ class AllItemsScreen extends StatelessWidget
 {
 
   final Category? itemInfo;
-
+  CategoryController categoryController = Get.put(CategoryController());
   AllItemsScreen({this.itemInfo,});
 
 
-  Future<List<Clothes>> getCurrentUserFavoriteList() async
+  Future<List<Clothes1>> getCurrentUserFavoriteList() async
   {
-    List<Clothes> favoriteListOfCurrentUser = [];
+    List<Clothes1> favoriteListOfCurrentUser = [];
 
     try
     {
       var res = await http.post(
-          Uri.parse(API.readAllItems),
+          Uri.parse(API.getAllCategoryItems),
           body:
           {
             // "user_id": itemInfo.user.user_id.toString(),
@@ -45,9 +46,9 @@ class AllItemsScreen extends StatelessWidget
 
         if (responseBodyOfCurrentUserFavoriteListItems['success'] == true)
         {
-          (responseBodyOfCurrentUserFavoriteListItems['currentUserFavoriteData'] as List).forEach((eachCurrentUserFavoriteItemData)
+          (responseBodyOfCurrentUserFavoriteListItems['userData'] as List).forEach((eachCurrentUserFavoriteItemData)
           {
-            favoriteListOfCurrentUser.add(Clothes.fromJson(eachCurrentUserFavoriteItemData));
+            favoriteListOfCurrentUser.add(Clothes1.fromJson(eachCurrentUserFavoriteItemData));
             // print("Error:: " + errorMsg.toString());
           });
         }
@@ -67,41 +68,57 @@ class AllItemsScreen extends StatelessWidget
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.black,
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
 
-          const Padding(
-            padding: EdgeInsets.fromLTRB(16, 24, 8, 8),
-            child: Text(
-              "My Favorite List:",
-              style: TextStyle(
-                color: Colors.orangeAccent,
-                fontSize: 30,
-                fontWeight: FontWeight.bold,
+              const Padding(
+                padding: EdgeInsets.fromLTRB(16, 24, 8, 8),
+                child: Text(
+                 "DigisFresh",
+                  style: TextStyle(
+                    color: Colors.orangeAccent,
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
-            ),
-          ),
+              // const Padding(
+              //   padding: EdgeInsets.fromLTRB(16, 24, 8, 8),
+              //   child: Text(
+              //     "hi+${categoryController!.categoryNam!}",
+              //     style: TextStyle(
+              //       color: Colors.orangeAccent,
+              //       fontSize: 30,
+              //       fontWeight: FontWeight.bold,
+              //     ),
+              //   ),
+              // ),
 
-          const Padding(
-            padding: EdgeInsets.fromLTRB(16, 24, 8, 8),
-            child: Text(
-              "Order these best organic products now.",
-              style: TextStyle(
-                color: Colors.grey,
-                fontSize: 16,
-                fontWeight: FontWeight.w300,
+              const Padding(
+                padding: EdgeInsets.fromLTRB(16, 24, 8, 8),
+                child: Text(
+                  "Order these best organic products now.",
+                  style: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w300,
+                  ),
+                ),
               ),
-            ),
+
+              const SizedBox(height: 24),
+
+              //displaying favoriteList
+              favoriteListItemDesignWidget(context),
+
+            ],
           ),
-
-          const SizedBox(height: 24),
-
-          //displaying favoriteList
-          favoriteListItemDesignWidget(context),
-
-        ],
+        ),
       ),
     );
   }
@@ -110,7 +127,7 @@ class AllItemsScreen extends StatelessWidget
   {
     return FutureBuilder(
         future: getCurrentUserFavoriteList(),
-        builder: (context, AsyncSnapshot<List<Clothes>> dataSnapShot)
+        builder: (context, AsyncSnapshot<List<Clothes1>> dataSnapShot)
         {
           if(dataSnapShot.connectionState == ConnectionState.waiting)
           {
@@ -136,24 +153,24 @@ class AllItemsScreen extends StatelessWidget
               scrollDirection: Axis.vertical,
               itemBuilder: (context, index)
               {
-                Clothes eachFavoriteItemRecord = dataSnapShot.data![index];
+                Clothes1 eachFavoriteItemRecord = dataSnapShot.data![index];
 
-                Clothes clickedClothItem = Clothes(
+                Clothes1 clickedClothItem = Clothes1(
                   item_id: eachFavoriteItemRecord.item_id,
-                  colors: eachFavoriteItemRecord.colors,
+                  // colors: eachFavoriteItemRecord.colors,
                   image: eachFavoriteItemRecord.image,
                   name: eachFavoriteItemRecord.name,
                   price: eachFavoriteItemRecord.price,
-                  rating: eachFavoriteItemRecord.rating,
+                  // rating: eachFavoriteItemRecord.rating,
                   sizes: eachFavoriteItemRecord.sizes,
                   description: eachFavoriteItemRecord.description,
-                  tags: eachFavoriteItemRecord.tags,
+                  // tags: eachFavoriteItemRecord.tags,
                 );
 
                 return GestureDetector(
                   onTap: ()
                   {
-                    Get.to(ItemDetailsScreen1(itemInfo: clickedClothItem));
+                    Get.to(ItemDetailsScreen(itemInfo: clickedClothItem));
                   },
                   child: Container(
                     margin: EdgeInsets.fromLTRB(
@@ -224,9 +241,9 @@ class AllItemsScreen extends StatelessWidget
 
                                 const SizedBox(height: 16,),
 
-                                //tags
+                                //subtext
                                 Text(
-                                  "Tags: \n" + eachFavoriteItemRecord.tags.toString().replaceAll("[", "").replaceAll("]", ""),
+                                  eachFavoriteItemRecord.subtext.toString(),
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                   style: const TextStyle(
@@ -240,7 +257,7 @@ class AllItemsScreen extends StatelessWidget
                           ),
                         ),
 
-                        //image clothes
+                        //image Clothes1
                         ClipRRect(
                           borderRadius: const BorderRadius.only(
                             topRight: Radius.circular(20),

@@ -375,7 +375,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
 
                       //size + color
                       Text(
-                        itemInfo["size"].replaceAll("[", "").replaceAll("]", "") + "\n" + itemInfo["color"].replaceAll("[", "").replaceAll("]", ""),
+                        itemInfo["size"],
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
