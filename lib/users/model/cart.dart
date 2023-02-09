@@ -14,6 +14,8 @@ class Cart
   // List<String>? colors;
   String? description;
   String? image;
+  String? outofstock;
+  String? subtext;
 
   Cart({
     this.cart_id,
@@ -30,6 +32,8 @@ class Cart
     // this.colors,
     this.description,
     this.image,
+    this.outofstock,
+    this.subtext,
   });
 
   factory Cart.fromJson(Map<String, dynamic> json) => Cart(
@@ -47,5 +51,7 @@ class Cart
     // colors: json['colors'].toString().split(', '),
     description: json['description'],
     image: json['image'],
+    outofstock: json['outofstock'],
+    subtext: json['subtext'],
   );
 }

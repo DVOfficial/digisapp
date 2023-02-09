@@ -33,7 +33,9 @@ class API
 
 
   //cart
-  static const addToCart = "$hostCart/add.php";
+  // static const addToCart = "$hostCart/add.php";
+  // static const addToCart = "$hostCart/add.php";
+  static const addToCart = "$hostCart/add2.php";
   static const getCartList = "$hostCart/read.php";
   static const deleteSelectedItemsFromCartList = "$hostCart/delete.php";
   static const updateItemInCartList = "$hostCart/update.php";

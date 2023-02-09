@@ -15,7 +15,7 @@ class ProfileFragmentScreen extends StatelessWidget
   {
     var resultResponse = await Get.dialog(
       AlertDialog(
-        backgroundColor: Colors.grey,
+        backgroundColor: Colors.white,
         title: const Text(
           "Logout",
           style: TextStyle(
@@ -71,7 +71,7 @@ class ProfileFragmentScreen extends StatelessWidget
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
-        color: Colors.grey,
+        color: Colors.black12,
       ),
       padding: const EdgeInsets.symmetric(
         horizontal: 16,
@@ -98,55 +98,57 @@ class ProfileFragmentScreen extends StatelessWidget
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      padding: const EdgeInsets.all(32),
-      children: [
+    return SafeArea(
+      child: ListView(
+        padding: const EdgeInsets.all(32),
+        children: [
 
-        Center(
-          child: Image.asset(
-            "images/man.png",
-            width: 240,
+          Center(
+            child: Image.asset(
+              "images/man.png",
+              width: 240,
+            ),
           ),
-        ),
 
-        const SizedBox(height: 20,),
+          const SizedBox(height: 20,),
 
-        userInfoItemProfile(Icons.person, _currentUser.user.user_name),
+          userInfoItemProfile(Icons.person, _currentUser.user.user_name),
 
-        const SizedBox(height: 20,),
+          const SizedBox(height: 20,),
 
-        userInfoItemProfile(Icons.email, _currentUser.user.user_email),
+          userInfoItemProfile(Icons.email, _currentUser.user.user_email),
 
-        const SizedBox(height: 20,),
+          const SizedBox(height: 20,),
 
-        Center(
-          child: Material(
-            color: Colors.redAccent,
-            borderRadius: BorderRadius.circular(8),
-            child: InkWell(
-              onTap: ()
-              {
-                signOutUser();
-              },
-              borderRadius: BorderRadius.circular(32),
-              child: const Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 30,
-                  vertical: 12,
-                ),
-                child: Text(
-                  "Sign Out",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
+          Center(
+            child: Material(
+              color: Colors.redAccent,
+              borderRadius: BorderRadius.circular(8),
+              child: InkWell(
+                onTap: ()
+                {
+                  signOutUser();
+                },
+                borderRadius: BorderRadius.circular(32),
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 30,
+                    vertical: 12,
+                  ),
+                  child: Text(
+                    "Sign Out",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                    ),
                   ),
                 ),
               ),
             ),
           ),
-        ),
 
-      ],
+        ],
+      ),
     );
   }
 }

@@ -9,16 +9,20 @@ import 'package:http/http.dart' as http;
 
 import '../../api_connection/api_connection.dart';
 import '../cart/cart_list_screen.dart';
+import '../cart/cart_list_screen1.dart';
+import '../controllers/category_controller.dart';
+import '../item/all_items_screen.dart';
 import '../item/item_details_screen.dart';
 import '../item/item_details_screen1.dart';
 import '../item/search_items.dart';
 import '../model/Clothes1.dart';
+import '../model/category.dart';
 
 
 class HomeFragmentScreen extends StatelessWidget
 {
   TextEditingController searchController = TextEditingController();
-
+  CategoryController categoryController = Get.put(CategoryController());
 //fetching trending list from phpmysql
   Future<List<Clothes1>> getTrendingClothItems() async
   {
@@ -90,52 +94,100 @@ class HomeFragmentScreen extends StatelessWidget
 
   }
 
+  Future<List<Category>> getAllCategory() async
+  {
+    List<Category> allClothItemsList = [];
+
+    try
+    {
+      var res = await http.post(
+          Uri.parse(API.getAllCategory)
+      );
+
+      if(res.statusCode == 200)
+      {
+        var responseBodyOfAllClothes = jsonDecode(res.body);
+        if(responseBodyOfAllClothes["success"] == true)
+        {
+          (responseBodyOfAllClothes["clothItemsData"] as List).forEach((eachRecord)
+          {
+            allClothItemsList.add(Category.fromJson(eachRecord));
+          });
+        }
+      }
+      else
+      {
+        Fluttertoast.showToast(msg: "Error, status code is not 200");
+      }
+    }
+    catch(errorMsg)
+    {
+      print("Error:: " + errorMsg.toString());
+    }
+
+    return allClothItemsList;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+    return SafeArea(
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
 
-          const SizedBox(height: 16,),
+            const SizedBox(height: 16,),
 
-          //search bar widget
-          showSearchBarWidget(),
+            //search bar widget
+            showSearchBarWidget(),
 
-          const SizedBox(height: 24,),
+            const SizedBox(height: 24,),
 
-          //trending-popular items
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 18),
-            child: Text(
-              "Trending",
-              style: TextStyle(
-                color: Colors.orangeAccent,
-                fontWeight: FontWeight.bold,
-                fontSize: 24,
+            //trending-popular items
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 18),
+              child: Text(
+                "Categories",
+                style: TextStyle(
+                  color: Colors.orangeAccent,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 24,
+                ),
               ),
             ),
-          ),
-          trendingMostPopularClothItemWidget(context),
-
-          const SizedBox(height: 24,),
-
-          //all new collections/items
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 18),
-            child: Text(
-              "New Collections",
-              style: TextStyle(
-                color: Colors.orangeAccent,
-                fontWeight: FontWeight.bold,
-                fontSize: 24,
+            trendingAllCategoriesItemWidget(context),
+            const SizedBox(height: 24,),
+            //trending-popular items
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 18),
+              child: Text(
+                "Top Selling Products",
+                style: TextStyle(
+                  color: Colors.orangeAccent,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 24,
+                ),
               ),
             ),
-          ),
+            trendingMostPopularClothItemWidget(context),
 
-          allItemWidget(context),
+            const SizedBox(height: 24,),
 
-        ],
+            //all new collections/items
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 18),
+              child: Text(
+                "New Collections",
+                style: TextStyle(
+                  color: Colors.orangeAccent,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 24,
+                ),
+              ),
+            ),
+            allItemWidget(context),
+          ],
+        ),
       ),
     );
   }
@@ -146,7 +198,7 @@ class HomeFragmentScreen extends StatelessWidget
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 18),
       child: TextField(
-        style: const TextStyle(color: Colors.white),
+        style: const TextStyle(color: Colors.black54),
         controller: searchController,
         decoration: InputDecoration(
           prefixIcon: IconButton(
@@ -161,13 +213,13 @@ class HomeFragmentScreen extends StatelessWidget
           ),
           hintText: "Search Organic Products here...",
           hintStyle: const TextStyle(
-            color: Colors.grey,
+            color: Colors.black54,
             fontSize: 12,
           ),
           suffixIcon: IconButton(
             onPressed: ()
             {
-              Get.to(CartListScreen());
+              Get.to(CartListScreen1());
             },
             icon: const Icon(
               Icons.shopping_cart,
@@ -241,13 +293,13 @@ class HomeFragmentScreen extends StatelessWidget
                     ),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
-                      color: Colors.black,
+                      color: Colors.white70,
                       boxShadow:
                       const [
                         BoxShadow(
                           offset: Offset(0,3),
                           blurRadius: 6,
-                          color: Colors.grey,
+                          color: Colors.black12,
                         ),
                       ],
                     ),
@@ -296,7 +348,7 @@ class HomeFragmentScreen extends StatelessWidget
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
                                       style: const TextStyle(
-                                        color: Colors.grey,
+                                        color: Colors.black54,
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -338,12 +390,12 @@ class HomeFragmentScreen extends StatelessWidget
                                   //       itemSize: 20,
                                   //     ),
 
-                                  const SizedBox(width: 8,),
+
 
                                   Text(
-                                    "(" + eachClothItemData.subtext.toString() + ")",
+                                    "(\₹" + eachClothItemData.subtext.toString() + ")",
                                     style: const TextStyle(
-                                      color: Colors.grey,
+                                      color: Colors.black54,
                                     ),
                                   ),
 
@@ -351,6 +403,119 @@ class HomeFragmentScreen extends StatelessWidget
                               ),
 
                             ],
+                          ),
+                        ),
+
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          );
+        }
+        else
+        {
+          return const Center(
+            child: Text("Empty, No Data."),
+          );
+        }
+      },
+    );
+  }
+
+  Widget trendingAllCategoriesItemWidget(context)
+  {
+    return FutureBuilder(
+      future: getAllCategory(),
+      builder: (context, AsyncSnapshot<List<Category>> dataSnapShot)
+      {
+        if(dataSnapShot.connectionState == ConnectionState.waiting)
+        {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+        if(dataSnapShot.data == null)
+        {
+          return const Center(
+            child: Text(
+              "No Categories found",
+            ),
+          );
+        }
+        if(dataSnapShot.data!.length > 0)
+        {
+          return SizedBox(
+            height: 210,
+            child: ListView.builder(
+              itemCount: dataSnapShot.data!.length,
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index)
+              {
+                Category eachCategoryItemRecord = dataSnapShot.data![index];
+                return GestureDetector(
+                  onTap: ()
+                  {
+                    categoryController.setCategoryName(eachCategoryItemRecord!.category_name!);
+                    Get.to(AllItemsScreen(itemInfo: eachCategoryItemRecord));
+                  },
+                  child: Container(
+                    width: 200,
+                    margin: EdgeInsets.fromLTRB(
+                      index == 0 ? 16 : 8,
+                      10,
+                      index == dataSnapShot.data!.length - 1 ? 16 : 8,
+                      10,
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: Colors.white70,
+                      boxShadow:
+                      const [
+                        BoxShadow(
+                          offset: Offset(0,3),
+                          blurRadius: 6,
+                          color: Colors.black12,
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      children: [
+
+                        //item image
+                        ClipRRect(
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(22),
+                            topRight: Radius.circular(22),
+                          ),
+                          child: FadeInImage(
+                            height: 150,
+                            width: 200,
+                            fit: BoxFit.cover,
+                            placeholder: const AssetImage("images/place_holder.png"),
+                            image: NetworkImage(
+                              eachCategoryItemRecord.category_imagelink!,
+                            ),
+                            imageErrorBuilder: (context, error, stackTraceError)
+                            {
+                              return const Center(
+                                child: Icon(
+                                  Icons.broken_image_outlined,
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                        const SizedBox(height: 8,),
+                        Text(
+                          eachCategoryItemRecord.category_name!,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            color: Colors.black54,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
 
@@ -418,13 +583,13 @@ class HomeFragmentScreen extends StatelessWidget
                     ),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
-                      color: Colors.black,
+                      color: Colors.white70,
                       boxShadow:
                       const [
                         BoxShadow(
                           offset: Offset(0,0),
                           blurRadius: 6,
-                          color: Colors.white,
+                          color: Colors.black12,
                         ),
                       ],
                     ),
@@ -452,7 +617,7 @@ class HomeFragmentScreen extends StatelessWidget
                                         overflow: TextOverflow.ellipsis,
                                         style: const TextStyle(
                                           fontSize: 18,
-                                          color: Colors.grey,
+                                          color: Colors.black54,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
@@ -475,8 +640,18 @@ class HomeFragmentScreen extends StatelessWidget
 
                                   ],
                                 ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  "\₹ " + eachClothItemRecord.subtext!,
+                                  maxLines: 3,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.black54,
+                                  ),
+                                ),
 
-                                const SizedBox(height: 16,),
+                                // const SizedBox(height: 16,),
 
                                 // //tags
                                 // Text(

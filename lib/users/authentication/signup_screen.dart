@@ -87,13 +87,14 @@ class _SignUpScreenState extends State<SignUpScreen>
         var resBodyOfSignUp = jsonDecode(res.body);
         if(resBodyOfSignUp['success'] == true)
         {
-          Fluttertoast.showToast(msg: "Congratulations, you are SignUp Successfully.");
+          Fluttertoast.showToast(msg: "Congratulations, you are SignUp Successfully.\nPlease Login");
 
           setState(() {
             nameController.clear();
             emailController.clear();
             passwordController.clear();
           });
+          Get.to(LoginScreen());
         }
         else
         {
@@ -116,7 +117,7 @@ class _SignUpScreenState extends State<SignUpScreen>
   Widget build(BuildContext context)
   {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.white,
       body: LayoutBuilder(
         builder: (context, cons)
         {
@@ -131,10 +132,10 @@ class _SignUpScreenState extends State<SignUpScreen>
                   //signup screen header
                   SizedBox(
                     width: MediaQuery.of(context).size.width,
-                    height: 285,
+                    height: 350,
                     child: Image.asset(
-                      "images/register.jpg",
-                    ),
+                      "images/signup.jpg",
+                    fit: BoxFit.cover,),
                   ),
 
                   //signup screen sign-up form

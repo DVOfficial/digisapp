@@ -1,16 +1,22 @@
 import 'dart:convert';
 
 
+// import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:badges/badges.dart';
 
 import '../../api_connection/api_connection.dart';
 import '../cart/cart_list_screen.dart';
+import '../cart/cart_list_screen1.dart';
+import '../controllers/cart_list_controller.dart';
 import '../controllers/item_details_controller.dart';
 import '../model/Clothes1.dart';
+import '../model/cart.dart';
 import '../model/clothes.dart';
 import '../userPreferences/current_user.dart';
 
@@ -31,6 +37,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen>
 {
   final itemDetailsController = Get.put(ItemDetailsController());
   final currentOnlineUser = Get.put(CurrentUser());
+  // final cartListController = Get.put(CartListController());
 
   addItemToCart() async
   {
@@ -53,11 +60,12 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen>
         var resBodyOfAddCart = jsonDecode(res.body);
         if(resBodyOfAddCart['success'] == true)
         {
-          Fluttertoast.showToast(msg: "item saved to Cart Successfully.");
+          Fluttertoast.showToast(msg: "item added to Cart Successfully\n Go to cart to place your order");
         }
         else
         {
-          Fluttertoast.showToast(msg: "Error Occur. Item not saved to Cart and Try Again.");
+          Fluttertoast.showToast(msg: "Item already added to cart");
+          // Fluttertoast.showToast(msg: "Error Occur. Item not saved to Cart and Try Again.");
         }
       }
       else
@@ -70,6 +78,59 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen>
       print("Error :: " + errorMsg.toString());
     }
   }
+  // getCurrentUserCartList() async
+  // {
+  //   List<Cart> cartListOfCurrentUser = [];
+  //
+  //   try
+  //   {
+  //     var res = await http.post(
+  //         Uri.parse(API.getCartList),
+  //         body:
+  //         {
+  //           "currentOnlineUserID": currentOnlineUser.user.user_id.toString(),
+  //         }
+  //     );
+  //
+  //     if (res.statusCode == 200)
+  //     {
+  //       var responseBodyOfGetCurrentUserCartItems = jsonDecode(res.body);
+  //
+  //       if (responseBodyOfGetCurrentUserCartItems['success'] == true)
+  //       {
+  //         (responseBodyOfGetCurrentUserCartItems['currentUserCartData'] as List).forEach((eachCurrentUserCartItemData)
+  //         {
+  //           cartListOfCurrentUser.add(Cart.fromJson(eachCurrentUserCartItemData));
+  //         });
+  //       }
+  //       else
+  //       {
+  //         Fluttertoast.showToast(msg: "your Cart List is Empty.");
+  //       }
+  //
+  //       cartListController.setList(cartListOfCurrentUser);
+  //       if(cartListController.cartList.length>0)
+  //       {
+  //         cartListController.cartList.forEach((eachItem)
+  //         {
+  //           cartListController.addSelectedItem(eachItem.cart_id!);
+  //         });
+  //       }
+  //
+  //       // calculateTotalAmount();
+  //
+  //     }
+  //     else
+  //     {
+  //       Fluttertoast.showToast(msg: "Status Code is not 200");
+  //     }
+  //   }
+  //   catch(errorMsg)
+  //   {
+  //     Fluttertoast.showToast(msg: "Error:: " + errorMsg.toString());
+  //   }
+  //   // calculateTotalAmount();
+  // }
 
   validateFavoriteList() async
   {
@@ -180,112 +241,116 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen>
     }
   }
 
-
   @override
   void initState() {
     super.initState();
 
     validateFavoriteList();
+    // getCurrentUserCartList();
   }
 
   @override
   Widget build(BuildContext context)
   {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: Stack(
-        children: [
+    widget.itemInfo!.outofstock.toString()=="Out of Stock"?
+    itemDetailsController.setOutofStockStatus("Out of Stock"):
+    itemDetailsController.setOutofStockStatus("Available");
 
-          //item image
-          FadeInImage(
-            height: MediaQuery.of(context).size.height * 0.5,
-            width: MediaQuery.of(context).size.width,
-            fit: BoxFit.cover,
-            placeholder: const AssetImage("images/place_holder.png"),
-            image: NetworkImage(
-              widget.itemInfo!.image!,
+
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        // appBar: buildAppBar(),
+        body: Stack(
+          children: [
+
+            //item image
+            FadeInImage(
+              height: MediaQuery.of(context).size.height * 0.5,
+              width: MediaQuery.of(context).size.width,
+              fit: BoxFit.cover,
+              placeholder: const AssetImage("images/place_holder.png"),
+              image: NetworkImage(
+                widget.itemInfo!.image!,
+              ),
+              imageErrorBuilder: (context, error, stackTraceError)
+              {
+                return const Center(
+                  child: Icon(
+                    Icons.broken_image_outlined,
+                  ),
+                );
+              },
             ),
-            imageErrorBuilder: (context, error, stackTraceError)
-            {
-              return const Center(
-                child: Icon(
-                  Icons.broken_image_outlined,
+
+            //item information
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: itemInfoWidget(),
+            ),
+
+            //3 buttons || back - favorite - shopping cart
+            Positioned(
+              top: MediaQuery.of(context).padding.top,
+              left: 0,
+              right: 0,
+              child: Container(
+                color: Colors.transparent,
+                child: Row(
+                  children: [
+                    //back
+                    IconButton(
+                      onPressed: ()
+                      {
+                        Get.back();
+                      },
+                      icon: const Icon(
+                        Icons.arrow_back,
+                        color: Colors.orangeAccent,
+                      ),
+                    ),
+                    const Spacer(),
+                    //favorite
+                    Obx(()=> IconButton(
+                      onPressed: ()
+                      {
+                        if(itemDetailsController.isFavorite == true)
+                        {
+                          //delete item from favorites
+                          deleteItemFromFavoriteList();
+                        }
+                        else
+                        {
+                          //save item to user favorites
+                          addItemToFavoriteList();
+                        }
+                      },
+                      icon: Icon(
+                        itemDetailsController.isFavorite
+                            ? Icons.bookmark
+                            : Icons.bookmark_border_outlined,
+                        color: Colors.orangeAccent,
+                      ),
+                    )),
+                    //shopping cart icon
+                    IconButton(
+                          onPressed: ()
+                          {
+                            Get.to(CartListScreen1());
+                          },
+                          icon: const Icon(
+                            Icons.shopping_cart,
+                            color: Colors.orangeAccent,
+                          ),
+
+                    ),
+                  ],
                 ),
-              );
-            },
-          ),
-
-          //item information
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: itemInfoWidget(),
-          ),
-
-          //3 buttons || back - favorite - shopping cart
-          Positioned(
-            top: MediaQuery.of(context).padding.top,
-            left: 0,
-            right: 0,
-            child: Container(
-              color: Colors.transparent,
-              child: Row(
-                children: [
-
-                  //back
-                  IconButton(
-                    onPressed: ()
-                    {
-                      Get.back();
-                    },
-                    icon: const Icon(
-                      Icons.arrow_back,
-                      color: Colors.orangeAccent,
-                    ),
-                  ),
-
-                  const Spacer(),
-
-                  //favorite
-                  Obx(()=> IconButton(
-                    onPressed: ()
-                    {
-                      if(itemDetailsController.isFavorite == true)
-                      {
-                        //delete item from favorites
-                        deleteItemFromFavoriteList();
-                      }
-                      else
-                      {
-                        //save item to user favorites
-                        addItemToFavoriteList();
-                      }
-                    },
-                    icon: Icon(
-                      itemDetailsController.isFavorite
-                          ? Icons.bookmark
-                          : Icons.bookmark_border_outlined,
-                      color: Colors.orangeAccent,
-                    ),
-                  )),
-
-                  //shopping cart icon
-                  IconButton(
-                    onPressed: ()
-                    {
-                      Get.to(CartListScreen());
-                    },
-                    icon: const Icon(
-                      Icons.shopping_cart,
-                      color: Colors.orangeAccent,
-                    ),
-                  ),
-
-                ],
               ),
             ),
-          ),
 
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -296,7 +361,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen>
       height: MediaQuery.of(Get.context!).size.height * 0.6,
       width: MediaQuery.of(Get.context!).size.width,
       decoration: const BoxDecoration(
-        color: Colors.black,
+        color: Colors.white70,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(30),
           topRight: Radius.circular(30),
@@ -333,11 +398,11 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen>
             //name
             Text(
               widget.itemInfo!.name!,
-              maxLines: 2,
+              maxLines: 4,
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(
                 fontSize: 24,
-                color: Colors.orangeAccent,
+                color: Colors.black87,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -384,17 +449,61 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen>
                           // const SizedBox(width: 8,),
 
                           //rating num
-                          Text(
-                            "(" + widget.itemInfo!.subtext.toString() + ")",
-                            style: const TextStyle(
-                              color: Colors.orangeAccent,
-                            ),
-                          ),
+                          // Text(
+                          //   "(\₹" + widget.itemInfo!.subtext.toString() + ")",
+                          //   style: const TextStyle(
+                          //     color: Colors.black87,
+                          //   ),
+                          //   maxLines: 4,
+                          //   overflow: TextOverflow.ellipsis,
+                          // ),
 
                         ],
                       ),
-
+                      Text(
+                        "(\₹" + widget.itemInfo!.subtext.toString() + ")",
+                        style: const TextStyle(
+                          color: Colors.black87,
+                        ),
+                        maxLines: 4,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                       const SizedBox(height: 10),
+                      widget.itemInfo!.outofstock.toString()=="Out of Stock"?
+                      (Wrap(
+                          runSpacing: 8,
+                          spacing: 8,
+                          children: [
+                            Container(
+                              height: 35,
+                              width: 150,
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      width: 2,
+                                      color: Colors.black87
+
+                                  ),
+                                  // color:Colors.black
+
+                              ),
+                              alignment: Alignment.center,
+                              child: Text(
+                                widget.itemInfo!.outofstock!.toString(),
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.black,
+                                ),
+
+                              ),
+
+                            ),
+                          ],
+
+
+
+                      )
+      )
+                          :Text(""),
 
                       // //tags
                       // Text(
@@ -410,6 +519,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen>
                       const SizedBox(height: 16),
 
                       //price
+
                       Text(
                         "\₹" + widget.itemInfo!.price.toString(),
                         style: const TextStyle(
@@ -418,6 +528,8 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen>
                           fontWeight: FontWeight.bold,
                         ),
                       ),
+                      //availability status
+
 
                     ],
                   ),
@@ -434,12 +546,12 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen>
                         {
                           itemDetailsController.setQuantityItem(itemDetailsController.quantity + 1);
                         },
-                        icon: const Icon(Icons.add_circle_outline, color: Colors.white,),
+                        icon: const Icon(Icons.add_circle_outline, color: Colors.black,size: 28),
                       ),
                       Text(
                         itemDetailsController.quantity.toString(),
                         style: const TextStyle(
-                          fontSize: 20,
+                          fontSize: 24,
                           color: Colors.orangeAccent,
                           fontWeight: FontWeight.bold,
                         ),
@@ -457,7 +569,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen>
                             Fluttertoast.showToast(msg: "Quantity must be 1 or greater than 1");
                           }
                         },
-                        icon: const Icon(Icons.remove_circle_outline, color: Colors.white,),
+                        icon: const Icon(Icons.remove_circle_outline, color: Colors.black,size: 28),
                       ),
                     ],
                   ),
@@ -523,10 +635,10 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen>
                       decoration: BoxDecoration(
                         border: Border.all(
                           width: 2,
-                          color: Colors.white
+                          color: Colors.black87
 
                         ),
-                        color:Colors.black
+                        // color:Colors.black
 
                       ),
                       alignment: Alignment.center,
@@ -534,7 +646,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen>
                         widget.itemInfo!.sizes!,
                         style: TextStyle(
                           fontSize: 16,
-                          color: Colors.white,
+                          color: Colors.black,
                         ),
                       ),
                     ),
@@ -553,7 +665,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen>
             //   ),
             // ),
 
-            const SizedBox(height: 8),
+            // const SizedBox(height: 8),
             // Wrap(
             //   runSpacing: 8,
             //   spacing: 8,
@@ -593,7 +705,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen>
             //   }),
             // ),
 
-            const SizedBox(height: 20),
+            // const SizedBox(height: 20),
 
             //description
             const Text(
@@ -609,7 +721,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen>
               widget.itemInfo!.description!,
               textAlign: TextAlign.justify,
               style: const TextStyle(
-                color: Colors.grey,
+                color: Colors.black87,
               ),
             ),
 
@@ -623,7 +735,10 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen>
               child: InkWell(
                 onTap: ()
                 {
-                  addItemToCart();
+                  itemDetailsController.outofchickenStatus=="Out of Stock"?
+                  Fluttertoast.showToast(msg: "Item is currently Out of Stock")
+                      :addItemToCart();
+                  itemDetailsController.setFakeCartCount(1);
                 },
                 borderRadius: BorderRadius.circular(10),
                 child: Container(
@@ -639,11 +754,133 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen>
                 ),
               ),
             ),
+            const SizedBox(height: 15),
 
-            const SizedBox(height: 30),
+
+
+            Obx(()=>
+            itemDetailsController.fakeCartCount>0?
+               Material(
+                elevation: 4,
+                color: Colors.orangeAccent,
+                borderRadius: BorderRadius.circular(10),
+                child: InkWell(
+                  onTap: ()
+                  {
+                    Get.to(CartListScreen1());
+                  },
+                  borderRadius: BorderRadius.circular(10),
+                  child: Container(
+                    alignment: Alignment.center,
+                    height: 50,
+                    child: const Text(
+                      "Go to Cart",
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+
+            ):
+            // Material(
+            //   elevation: 4,
+            //   color: Colors.orangeAccent,
+            //   borderRadius: BorderRadius.circular(10),
+            //   child: InkWell(
+            //     onTap: ()
+            //     {
+            //       Get.to(CartListScreen1());
+            //     },
+            //     borderRadius: BorderRadius.circular(10),
+            //     child: Container(
+            //       alignment: Alignment.center,
+            //       height: 50,
+            //       child: const Text(
+            //         "Add to Cart",
+            //         style: TextStyle(
+            //           fontSize: 20,
+            //           color: Colors.white,
+            //         ),
+            //       ),
+            //     ),
+            //   ),
+            // ),
+            const SizedBox(height: 30),),
           ],
         ),
       ),
     );
   }
+
+  // AppBar buildAppBar() {
+  //   return AppBar(
+  //     backgroundColor: Colors.transparent,
+  //     elevation:0,
+  //     leading: IconButton(
+  //       onPressed: () {  },
+  //       icon: Icon(Icons.arrow_back,color: Colors.orange,),
+  //
+  //     ),
+  //     actions:[
+  //       IconButton(
+  //         onPressed: ()
+  //         {
+  //           Get.back();
+  //         },
+  //         icon: const Icon(
+  //           Icons.arrow_back,
+  //           color: Colors.orangeAccent,
+  //         ),
+  //       ),
+  //       const Spacer(),
+  //       //favorite
+  //       Obx(()=> IconButton(
+  //         onPressed: ()
+  //         {
+  //           if(itemDetailsController.isFavorite == true)
+  //           {
+  //             //delete item from favorites
+  //             deleteItemFromFavoriteList();
+  //           }
+  //           else
+  //           {
+  //             //save item to user favorites
+  //             addItemToFavoriteList();
+  //           }
+  //         },
+  //         icon: Icon(
+  //           itemDetailsController.isFavorite
+  //               ? Icons.bookmark
+  //               : Icons.bookmark_border_outlined,
+  //           color: Colors.orangeAccent,
+  //         ),
+  //       )),
+  //       //shopping cart icon
+  //
+  //          IconButton(
+  //           onPressed: ()
+  //           {
+  //             Get.to(CartListScreen());
+  //           },
+  //           icon: const Icon(
+  //             Icons.shopping_cart,
+  //             color: Colors.orangeAccent,
+  //           ),
+  //
+  //
+  //       ),
+  //
+  //       Badge(
+  //         badgeContent: Text(
+  //           '5',
+  //           style: TextStyle(color: Colors.white, fontSize: 30),
+  //         ),
+  //         badgeColor: Colors.green,
+  //         child: Icon(Icons.person, size: 50),
+  //       ),
+  //     ]
+  //   );
+  // }
 }

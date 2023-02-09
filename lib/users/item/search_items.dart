@@ -83,24 +83,27 @@ class _SearchItemsState extends State<SearchItems>
   @override
   Widget build(BuildContext context)
   {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: AppBar(
-        backgroundColor: Colors.white24,
-        title: showSearchBarWidget(),
-        titleSpacing: 0,
-        leading: IconButton(
-          onPressed: ()
-          {
-            Get.back();
-          },
-          icon: const Icon(
-            Icons.arrow_back,
-            color: Colors.orangeAccent,
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          title: showSearchBarWidget(),
+          titleSpacing: 0,
+          leading: IconButton(
+            onPressed: ()
+            {
+              Get.back();
+            },
+            icon: const Icon(
+              Icons.arrow_back,
+              color: Colors.orangeAccent,
+            ),
           ),
         ),
+        body: searchItemDesignWidget(context),
       ),
-      body: searchItemDesignWidget(context),
     );
   }
 
@@ -109,7 +112,7 @@ class _SearchItemsState extends State<SearchItems>
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 18),
       child: TextField(
-        style: const TextStyle(color: Colors.white),
+        style: const TextStyle(color: Colors.black54),
         controller: searchController,
         decoration: InputDecoration(
           prefixIcon: IconButton(
@@ -125,7 +128,7 @@ class _SearchItemsState extends State<SearchItems>
           ),
           hintText: "Search best organic products here...",
           hintStyle: const TextStyle(
-            color: Colors.grey,
+            color: Colors.black54,
             fontSize: 12,
           ),
           suffixIcon: IconButton(
@@ -178,7 +181,7 @@ class _SearchItemsState extends State<SearchItems>
           {
             return const Center(
               child: Text(
-                "No Trending item found",
+                "No item found",
               ),
             );
           }
@@ -187,7 +190,7 @@ class _SearchItemsState extends State<SearchItems>
             return ListView.builder(
               itemCount: dataSnapShot.data!.length,
               shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
+              // physics: const NeverScrollableScrollPhysics(),
               scrollDirection: Axis.vertical,
               itemBuilder: (context, index)
               {
@@ -207,13 +210,13 @@ class _SearchItemsState extends State<SearchItems>
                     ),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
-                      color: Colors.black,
+                      color: Colors.white54,
                       boxShadow:
                       const [
                         BoxShadow(
                           offset: Offset(0,0),
                           blurRadius: 6,
-                          color: Colors.white,
+                          color: Colors.black12,
                         ),
                       ],
                     ),
@@ -230,54 +233,66 @@ class _SearchItemsState extends State<SearchItems>
                               children: [
 
                                 //name and price
-                                Row(
-                                  children: [
-
-                                    //name
-                                    Expanded(
-                                      child: Text(
-                                        eachClothItemRecord.name!,
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: const TextStyle(
-                                          fontSize: 18,
-                                          color: Colors.grey,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-
-                                    //price
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 12, right: 12),
-                                      child: Text(
-                                        "\₹ " + eachClothItemRecord.price.toString(),
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: const TextStyle(
-                                          fontSize: 18,
-                                          color: Colors.orangeAccent,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-
-                                  ],
+                                // Row(
+                                //   children: [
+                                //
+                                //     //name
+                                //     Expanded(
+                                //       child: Text(
+                                //         eachClothItemRecord.name!,
+                                //         maxLines: 3,
+                                //         overflow: TextOverflow.ellipsis,
+                                //         style: const TextStyle(
+                                //           fontSize: 18,
+                                //           color: Colors.black54,
+                                //           fontWeight: FontWeight.bold,
+                                //         ),
+                                //       ),
+                                //     ),
+                                //
+                                //
+                                //
+                                //   ],
+                                // ),
+                                const SizedBox(height: 8,),
+                                Text(
+                                  eachClothItemRecord.name!,
+                                  maxLines: 4,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.black54,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
-
-                                const SizedBox(height: 16,),
+                                // const SizedBox(height: 8,),
 
                                 //tags
                                 Text(
-                                  "\n" + eachClothItemRecord.subtext.toString().replaceAll("[", "").replaceAll("]", ""),
-                                  maxLines: 2,
+                                  "\n\₹" + eachClothItemRecord.subtext.toString(),
+                                  maxLines: 3,
                                   overflow: TextOverflow.ellipsis,
                                   style: const TextStyle(
                                     fontSize: 12,
-                                    color: Colors.grey,
+                                    color: Colors.black54,
                                   ),
                                 ),
-
+                                const SizedBox(height: 8),
+                                //price
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 4, right: 12),
+                                  child: Text(
+                                    "\₹ " + eachClothItemRecord.price.toString(),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                      fontSize: 18,
+                                      color: Colors.orangeAccent,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
                               ],
                             ),
                           ),

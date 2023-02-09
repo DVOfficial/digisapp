@@ -858,7 +858,7 @@
 //               Padding(
 //                 padding: const EdgeInsets.all(8.0),
 //                 child: Text(
-//                   "Q: " + eachSelectedItem["quantity"].toString(),
+//                   "Qty: " + eachSelectedItem["quantity"].toString(),
 //                   style: const TextStyle(
 //                     fontSize: 24,
 //                     color: Colors.orangeAccent,

@@ -40,7 +40,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
     {
       var response = await Get.dialog(
         AlertDialog(
-          backgroundColor: Colors.black,
+          backgroundColor: Colors.white,
           title: const Text(
             "Confirmation",
             style: TextStyle(
@@ -124,12 +124,14 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
   @override
   Widget build(BuildContext context)
   {
+    DateTime tempDate = new DateFormat("dd MMMM, yyyy  hh:mm a").parse(widget.clickedOrderInfo!.dateTime1!);
+
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.orange,
+        backgroundColor: Colors.orangeAccent,
         title: Text(
-          DateFormat("dd MMMM, yyyy - hh:mm a").format(widget.clickedOrderInfo!.dateTime!),
+          DateFormat("dd MMMM, yyyy \nhh:mm a").format(tempDate),
           style: const TextStyle(fontSize: 14),
         ),
         actions: [
@@ -179,7 +181,9 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
+              widget.clickedOrderInfo!.order_id==10?
+              showTitleText("Order placed successfully"):
+              showTitleText("Order No: "+widget.clickedOrderInfo!.order_id!.toString()+" placed successfully"),
               //display items belongs to clicked order
               displayClickedOrderItems(),
 
@@ -239,7 +243,14 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
 //Order placed on
               showTitleText("Order Placed On:"),
               const SizedBox(height: 8,),
-              showContentText(DateFormat("dd MMMM, yyyy - hh:mm a").format(widget.clickedOrderInfo!.dateTime!),),
+              showContentText(DateFormat("dd MMMM, yyyy  hh:mm a").format(tempDate),),
+
+              const SizedBox(height: 26,),
+//Order placed on
+//               showTitleText("Order Placed On:"),
+//               const SizedBox(height: 8,),
+//               // showContentText(DateFormat("dd MMMM, yyyy - hh:mm a").format(widget.clickedOrderInfo!.dateTime1!),),
+//               showContentText(widget.clickedOrderInfo!.dateTime1!.toString()),
 
               const SizedBox(height: 26,),
 
@@ -277,7 +288,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
       style: const TextStyle(
         fontWeight: FontWeight.bold,
         fontSize: 20,
-        color: Colors.grey,
+        color: Colors.black87,
       ),
     );
   }
@@ -287,8 +298,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
     return Text(
       contentText,
       style: const TextStyle(
-        fontSize: 14,
-        color: Colors.white38,
+        fontSize: 16,
+        color: Colors.black54,
       ),
     );
   }
@@ -311,13 +322,13 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
           ),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
-            color: Colors.white24,
+            color: Colors.white54,
             boxShadow:
             const [
               BoxShadow(
                 offset: Offset(0, 0),
                 blurRadius: 6,
-                color: Colors.black26,
+                color: Colors.black12,
               ),
             ],
           ),
@@ -366,7 +377,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                           fontSize: 18,
-                          color: Colors.white70,
+                          color: Colors.black87,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -379,7 +390,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
-                          color: Colors.white54,
+                          color: Colors.black87,
                         ),
                       ),
 
@@ -401,7 +412,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                             + itemInfo["quantity"].toString()
                             + " = " + itemInfo["totalAmount"].toString(),
                         style: const TextStyle(
-                          color: Colors.grey,
+                          color: Colors.black87,
                           fontSize: 12,
                         ),
                       ),
@@ -416,7 +427,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  "Q: " + itemInfo["quantity"].toString(),
+                  "Qty: " + itemInfo["quantity"].toString(),
                   style: const TextStyle(
                     fontSize: 24,
                     color: Colors.orangeAccent,

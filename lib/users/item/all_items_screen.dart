@@ -70,27 +70,33 @@ class AllItemsScreen extends StatelessWidget
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.white,
+        appBar:AppBar(
+        elevation: 0,
+        backgroundColor: Colors.white,
+        iconTheme: IconThemeData(
+        color: Colors.orange, //change your color here
+    ),
+    title: const Text(
+      "DigisFresh",
+      style: TextStyle(
+        color: Colors.orangeAccent,
+        fontSize: 30,
+        fontWeight: FontWeight.bold,
+      ),
+    ),
+
+    centerTitle: true,
+        ),
         body: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
 
-              const Padding(
-                padding: EdgeInsets.fromLTRB(16, 24, 8, 8),
-                child: Text(
-                 "DigisFresh",
-                  style: TextStyle(
-                    color: Colors.orangeAccent,
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
               // const Padding(
               //   padding: EdgeInsets.fromLTRB(16, 24, 8, 8),
               //   child: Text(
-              //     "hi+${categoryController!.categoryNam!}",
+              //    "DigisFresh",
               //     style: TextStyle(
               //       color: Colors.orangeAccent,
               //       fontSize: 30,
@@ -98,20 +104,33 @@ class AllItemsScreen extends StatelessWidget
               //     ),
               //   ),
               // ),
+              // // const Padding(
+              // //   padding: EdgeInsets.fromLTRB(16, 24, 8, 8),
+              // //   child: Text(
+              // //     "hi+${categoryController!.categoryNam!}",
+              // //     style: TextStyle(
+              // //       color: Colors.orangeAccent,
+              // //       fontSize: 30,
+              // //       fontWeight: FontWeight.bold,
+              // //     ),
+              // //   ),
+              // // ),
 
-              const Padding(
-                padding: EdgeInsets.fromLTRB(16, 24, 8, 8),
-                child: Text(
-                  "Order these best organic products now.",
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w300,
+              Center(
+                child: const Padding(
+                  padding: EdgeInsets.fromLTRB(16, 8, 8, 8),
+                  child: Text(
+                    "Order these best organic products now.",
+                    style: TextStyle(
+                      color: Colors.black54,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w300,
+                    ),
                   ),
                 ),
               ),
 
-              const SizedBox(height: 24),
+              const SizedBox(height: 12),
 
               //displaying favoriteList
               favoriteListItemDesignWidget(context),
@@ -139,7 +158,7 @@ class AllItemsScreen extends StatelessWidget
           {
             return const Center(
               child: Text(
-                "No favorite item found",
+                "No item found",
                 style: TextStyle(color: Colors.grey,),
               ),
             );
@@ -157,6 +176,7 @@ class AllItemsScreen extends StatelessWidget
 
                 Clothes1 clickedClothItem = Clothes1(
                   item_id: eachFavoriteItemRecord.item_id,
+                  subtext: eachFavoriteItemRecord.subtext,
                   // colors: eachFavoriteItemRecord.colors,
                   image: eachFavoriteItemRecord.image,
                   name: eachFavoriteItemRecord.name,
@@ -164,6 +184,7 @@ class AllItemsScreen extends StatelessWidget
                   // rating: eachFavoriteItemRecord.rating,
                   sizes: eachFavoriteItemRecord.sizes,
                   description: eachFavoriteItemRecord.description,
+                  outofstock: eachFavoriteItemRecord.outofstock,
                   // tags: eachFavoriteItemRecord.tags,
                 );
 
@@ -181,13 +202,13 @@ class AllItemsScreen extends StatelessWidget
                     ),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
-                      color: Colors.black,
+                      color: Colors.white70,
                       boxShadow:
                       const [
                         BoxShadow(
                           offset: Offset(0,0),
                           blurRadius: 6,
-                          color: Colors.white,
+                          color: Colors.black12,
                         ),
                       ],
                     ),
@@ -202,84 +223,131 @@ class AllItemsScreen extends StatelessWidget
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-
-                                //name and price
-                                Row(
-                                  children: [
-
-                                    //name
-                                    Expanded(
-                                      child: Text(
-                                        eachFavoriteItemRecord.name!,
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: const TextStyle(
-                                          fontSize: 18,
-                                          color: Colors.grey,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-
-                                    //price
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 12, right: 12),
-                                      child: Text(
-                                        "\₹ " + eachFavoriteItemRecord.price.toString(),
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: const TextStyle(
-                                          fontSize: 18,
-                                          color: Colors.orangeAccent,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-
-                                  ],
-                                ),
-
-                                const SizedBox(height: 16,),
-
-                                //subtext
-                                Text(
-                                  eachFavoriteItemRecord.subtext.toString(),
-                                  maxLines: 2,
+                                const SizedBox(height: 8,),
+                                 Text(
+                                  eachFavoriteItemRecord.name!,
+                                  maxLines: 3,
                                   overflow: TextOverflow.ellipsis,
                                   style: const TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.grey,
+                                    fontSize: 18,
+                                    color: Colors.black54,
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
+                                //name and price
+                                // Row(
+                                //   children: [
+                                //
+                                //     //name
+                                //     Expanded(
+                                //       child: Text(
+                                //         eachFavoriteItemRecord.name!,
+                                //         maxLines: 3,
+                                //         overflow: TextOverflow.ellipsis,
+                                //         style: const TextStyle(
+                                //           fontSize: 18,
+                                //           color: Colors.black54,
+                                //           fontWeight: FontWeight.bold,
+                                //         ),
+                                //       ),
+                                //     ),
+                                //
+                                //     // //price
+                                //     // Padding(
+                                //     //   padding: const EdgeInsets.only(left: 12, right: 12),
+                                //     //   child: Text(
+                                //     //     "\₹ " + eachFavoriteItemRecord.price.toString(),
+                                //     //     maxLines: 2,
+                                //     //     overflow: TextOverflow.ellipsis,
+                                //     //     style: const TextStyle(
+                                //     //       fontSize: 18,
+                                //     //       color: Colors.orangeAccent,
+                                //     //       fontWeight: FontWeight.bold,
+                                //     //     ),
+                                //     //   ),
+                                //     // ),
+                                //
+                                //   ],
+                                // ),
 
+                                const SizedBox(height: 8,),
+
+                                //subtext
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 4),
+                                  child: Text(
+                                    "\₹" + eachFavoriteItemRecord.subtext.toString(),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.black54,
+                                    ),
+                                  ),
+                                ),
+                                //price
+                                const SizedBox(height: 8,),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 4, right: 12),
+                                  child: Text(
+                                    "\₹" + eachFavoriteItemRecord.price.toString(),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                      fontSize: 18,
+                                      color: Colors.orangeAccent,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 8,),
                               ],
                             ),
                           ),
                         ),
 
                         //image Clothes1
-                        ClipRRect(
-                          borderRadius: const BorderRadius.only(
-                            topRight: Radius.circular(20),
-                            bottomRight: Radius.circular(20),
-                          ),
-                          child: FadeInImage(
-                            height: 130,
-                            width: 130,
-                            fit: BoxFit.cover,
-                            placeholder: const AssetImage("images/place_holder.png"),
-                            image: NetworkImage(
-                              eachFavoriteItemRecord.image!,
-                            ),
-                            imageErrorBuilder: (context, error, stackTraceError)
-                            {
-                              return const Center(
-                                child: Icon(
-                                  Icons.broken_image_outlined,
+                        Column(
+                          children: [
+                            ClipRRect(
+                              borderRadius: const BorderRadius.only(
+                                topRight: Radius.circular(20),
+                                bottomRight: Radius.circular(20),
+                              ),
+                              child: FadeInImage(
+                                height: 130,
+                                width: 130,
+                                fit: BoxFit.cover,
+                                placeholder: const AssetImage("images/place_holder.png"),
+                                image: NetworkImage(
+                                  eachFavoriteItemRecord.image!,
                                 ),
-                              );
-                            },
-                          ),
+                                imageErrorBuilder: (context, error, stackTraceError)
+                                {
+                                  return const Center(
+                                    child: Icon(
+                                      Icons.broken_image_outlined,
+                                    ),
+                                  );
+                                },
+                              ),
+
+                            ),
+
+                            // const SizedBox(height: 8,),
+                            eachFavoriteItemRecord.outofstock.toString()=="Out of Stock"?
+                            Text(
+                              eachFavoriteItemRecord.outofstock!,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                color: Colors.red,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ):SizedBox(height: 2,),
+                          ],
+
                         ),
 
                       ],

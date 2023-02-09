@@ -62,91 +62,93 @@ class OrderFragmentScreen extends StatelessWidget
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
 
-          //Order image       //history image
-          //myOrder title     //history title
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 24, 8, 0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
+            //Order image       //history image
+            //myOrder title     //history title
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 24, 8, 0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
 
-                //order icon image
-                // my orders
-                Column(
-                  children: [
-                    Image.asset(
-                      "images/orders_icon.png",
-                      width: 140,
-                    ),
-                    const Text(
-                      "My Orders",
-                      style: TextStyle(
-                        color: Colors.orangeAccent,
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
+                  //order icon image
+                  // my orders
+                  Column(
+                    children: [
+                      Image.asset(
+                        "images/orders_icon.png",
+                        width: 140,
+                      ),
+                      const Text(
+                        "My Orders",
+                        style: TextStyle(
+                          color: Colors.orangeAccent,
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  //history icon image
+                  // history
+                  GestureDetector(
+                    onTap: ()
+                    {
+                      //send user to orders history screen
+                      Get.to(HistoryScreen());
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          Image.asset(
+                            "images/history_icon.png",
+                            width: 45,
+                          ),
+                          const Text(
+                            "History",
+                            style: TextStyle(
+                              color: Colors.orangeAccent,
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
-
-                //history icon image
-                // history
-                GestureDetector(
-                  onTap: ()
-                  {
-                    //send user to orders history screen
-                    Get.to(HistoryScreen());
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      children: [
-                        Image.asset(
-                          "images/history_icon.png",
-                          width: 45,
-                        ),
-                        const Text(
-                          "History",
-                          style: TextStyle(
-                            color: Colors.orangeAccent,
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
                   ),
-                ),
 
-              ],
-            ),
-          ),
-
-          //some info
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 30.0),
-            child: Text(
-              "Here are your successfully placed orders.",
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.white,
-                fontWeight: FontWeight.w400,
+                ],
               ),
             ),
-          ),
 
-          //displaying the user orderList
-          Expanded(
-            child: displayOrdersList(context),
-          ),
+            //some info
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 30.0),
+              child: Text(
+                "Here are your successfully placed orders.",
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+            ),
 
-        ],
+            //displaying the user orderList
+            Expanded(
+              child: displayOrdersList(context),
+            ),
+
+          ],
+        ),
       ),
     );
   }
@@ -208,9 +210,10 @@ class OrderFragmentScreen extends StatelessWidget
             itemBuilder: (context, index)
             {
               Order eachOrderData = orderList[index];
+              DateTime tempDate = new DateFormat("dd MMMM, yyyy  hh:mm a").parse(eachOrderData.dateTime1!);
 
               return Card(
-                color: Colors.white24,
+                color: Colors.white70,
                 child: Padding(
                   padding: const EdgeInsets.all(18),
                   child: ListTile(
@@ -251,24 +254,44 @@ class OrderFragmentScreen extends StatelessWidget
                           crossAxisAlignment: CrossAxisAlignment.end,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
+                            //
+                            // //date
+                            // Text(
+                            //   DateFormat(
+                            //     "dd MMMM, yyyy"
+                            //   ).format(eachOrderData.dateTime!),
+                            //   style: const TextStyle(
+                            //       color: Colors.grey,
+                            //   ),
+                            // ),
+                            //
+                            // const SizedBox(height: 4),
+                            //
+                            // //time
+                            // Text(
+                            //   DateFormat(
+                            //       "hh:mm a"
+                            //   ).format(eachOrderData.dateTime!),
+                            //   style: const TextStyle(
+                            //     color: Colors.grey,
+                            //   ),
+                            // ),
+                            // //time
 
                             //date
                             Text(
                               DateFormat(
-                                "dd MMMM, yyyy"
-                              ).format(eachOrderData.dateTime!),
+                                  "dd MMMM, yyyy"
+                              ).format(tempDate),
                               style: const TextStyle(
-                                  color: Colors.grey,
+                                color: Colors.grey,
                               ),
                             ),
 
-                            const SizedBox(height: 4),
-
-                            //time
-                            Text(
-                              DateFormat(
-                                  "hh:mm a"
-                              ).format(eachOrderData.dateTime!),
+                Text(
+                  DateFormat(
+                  "hh:mm a"
+              ).format(tempDate),
                               style: const TextStyle(
                                 color: Colors.grey,
                               ),
@@ -299,13 +322,13 @@ class OrderFragmentScreen extends StatelessWidget
             children: const [
               Center(
                 child: Text(
-                  "Nothing to show...",
+                  "Nothing to show...No New Orders\n\nCheck history for previous orders",
                   style: TextStyle(color: Colors.grey,),
                 ),
               ),
-              Center(
-                child: CircularProgressIndicator(),
-              ),
+              // Center(
+              //   child: CircularProgressIndicator(),
+              // ),
             ],
           );
         }

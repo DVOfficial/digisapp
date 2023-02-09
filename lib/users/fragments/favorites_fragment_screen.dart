@@ -60,41 +60,43 @@ class FavoritesFragmentScreen extends StatelessWidget
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+    return SafeArea(
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
 
-          const Padding(
-            padding: EdgeInsets.fromLTRB(16, 24, 8, 8),
-            child: Text(
-              "My Favorite List:",
-              style: TextStyle(
-                color: Colors.orangeAccent,
-                fontSize: 30,
-                fontWeight: FontWeight.bold,
+            const Padding(
+              padding: EdgeInsets.fromLTRB(16, 24, 8, 8),
+              child: Text(
+                "My Favorite List:",
+                style: TextStyle(
+                  color: Colors.orangeAccent,
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
-          ),
 
-          const Padding(
-            padding: EdgeInsets.fromLTRB(16, 24, 8, 8),
-            child: Text(
-              "Order these best organic products now.",
-              style: TextStyle(
-                color: Colors.grey,
-                fontSize: 16,
-                fontWeight: FontWeight.w300,
+            const Padding(
+              padding: EdgeInsets.fromLTRB(16, 24, 8, 8),
+              child: Text(
+                "Order these best organic products now.",
+                style: TextStyle(
+                  color: Colors.grey,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w300,
+                ),
               ),
             ),
-          ),
 
-          const SizedBox(height: 24),
+            const SizedBox(height: 24),
 
-          //displaying favoriteList
-          favoriteListItemDesignWidget(context),
+            //displaying favoriteList
+            favoriteListItemDesignWidget(context),
 
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -141,6 +143,7 @@ class FavoritesFragmentScreen extends StatelessWidget
                   // rating: eachFavoriteItemRecord.rating,
                   sizes: eachFavoriteItemRecord.sizes,
                   description: eachFavoriteItemRecord.description,
+                  outofstock: eachFavoriteItemRecord.outofstock,
                   // tags: eachFavoriteItemRecord.tags,
                 );
 
@@ -158,13 +161,13 @@ class FavoritesFragmentScreen extends StatelessWidget
                     ),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
-                      color: Colors.black,
+                      color: Colors.white70,
                       boxShadow:
                       const [
                         BoxShadow(
                           offset: Offset(0,0),
                           blurRadius: 6,
-                          color: Colors.white,
+                          color: Colors.black12,
                         ),
                       ],
                     ),
@@ -192,7 +195,7 @@ class FavoritesFragmentScreen extends StatelessWidget
                                         overflow: TextOverflow.ellipsis,
                                         style: const TextStyle(
                                           fontSize: 18,
-                                          color: Colors.grey,
+                                          color: Colors.black54,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
@@ -220,12 +223,12 @@ class FavoritesFragmentScreen extends StatelessWidget
 
                                 //tags
                                 Text(
-                                  eachFavoriteItemRecord.subtext.toString().replaceAll("[", "").replaceAll("]", ""),
+                                  "\₹"+eachFavoriteItemRecord.subtext.toString(),
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                   style: const TextStyle(
                                     fontSize: 12,
-                                    color: Colors.grey,
+                                    color: Colors.black54,
                                   ),
                                 ),
 

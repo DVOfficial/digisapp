@@ -9,6 +9,7 @@ import 'package:http/http.dart' as http;
 import '../api_connection/api_connection.dart';
 import '../users/authentication/login_screen.dart';
 import 'admin_upload_items.dart';
+import 'admin_upload_items1.dart';
 
 
 class AdminLoginScreen extends StatefulWidget
@@ -50,7 +51,7 @@ class _AdminLoginScreenState extends State<AdminLoginScreen>
 
           Future.delayed(const Duration(milliseconds: 2000), ()
           {
-            Get.to(AdminUploadItemsScreen());
+            Get.to(AdminUploadItemsScreen1());
           });
         }
         else
@@ -73,7 +74,7 @@ class _AdminLoginScreenState extends State<AdminLoginScreen>
   Widget build(BuildContext context)
   {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.white,
       body: LayoutBuilder(
         builder: (context, cons)
         {

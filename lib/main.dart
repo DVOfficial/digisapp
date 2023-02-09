@@ -1,4 +1,6 @@
 
+import 'dart:io';
+
 import 'package:digisapp/users/authentication/login_screen.dart';
 import 'package:digisapp/users/userPreferences/user_preferences.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +10,7 @@ import 'package:digisapp/users/fragments/dashboard_of_fragments.dart';
 void main()
 {
   WidgetsFlutterBinding.ensureInitialized();
-
+  HttpOverrides.global = MyHttpOverrides();
   runApp(const MyApp());
 }
 
@@ -42,4 +44,11 @@ class MyApp extends StatelessWidget {
   }
 }
 
-
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+  }
+}

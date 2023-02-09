@@ -9,10 +9,12 @@ class CartListController extends GetxController
   RxList<int> _selectedItemList = <int>[].obs; //user selected items for which user want to proceed and want to place final order //2
   RxBool _isSelectedAll = false.obs;
   RxDouble _total = 0.0.obs;
+  RxBool _isPaymentSuccess = false.obs;
 
   List<Cart> get cartList => _cartlist.value;
   List<int> get selectedItemList => _selectedItemList.value;
   bool get isSelectedAll => _isSelectedAll.value;
+  bool get isPaymentSuccess => _isPaymentSuccess.value;
   double get total => _total.value;
 
   setList(List<Cart> list)
@@ -36,6 +38,11 @@ class CartListController extends GetxController
   {
                             //true
     _isSelectedAll.value = !_isSelectedAll.value;
+  }
+  setIs_PaymentSuccess()
+  {
+                            //true
+    _isPaymentSuccess.value = !_isPaymentSuccess.value;
   }
 
   clearAllSelectedItems()

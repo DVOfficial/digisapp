@@ -9,6 +9,7 @@ import 'package:http/http.dart' as http;
 
 import '../../api_connection/api_connection.dart';
 import '../cart/cart_list_screen.dart';
+import '../cart/cart_list_screen1.dart';
 import '../controllers/category_controller.dart';
 import '../item/all_items_screen.dart';
 import '../item/item_details_screen.dart';
@@ -58,33 +59,35 @@ class CategoryFragmentScreen extends StatelessWidget
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+    return SafeArea(
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
 
-          const SizedBox(height: 16,),
+            const SizedBox(height: 16,),
 
-          //search bar widget
-          showSearchBarWidget(),
+            //search bar widget
+            showSearchBarWidget(),
 
-          const SizedBox(height: 24,),
+            const SizedBox(height: 24,),
 
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 18),
-            child: Text(
-              "Categories",
-              style: TextStyle(
-                color: Colors.orangeAccent,
-                fontWeight: FontWeight.bold,
-                fontSize: 24,
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 18),
+              child: Text(
+                "Categories",
+                style: TextStyle(
+                  color: Colors.orangeAccent,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 24,
+                ),
               ),
             ),
-          ),
 
-          allItemWidget(context),
+            allItemWidget(context),
 
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -94,7 +97,7 @@ class CategoryFragmentScreen extends StatelessWidget
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 18),
       child: TextField(
-        style: const TextStyle(color: Colors.white),
+        style: const TextStyle(color: Colors.black87),
         controller: searchController,
         decoration: InputDecoration(
           prefixIcon: IconButton(
@@ -115,7 +118,7 @@ class CategoryFragmentScreen extends StatelessWidget
           suffixIcon: IconButton(
             onPressed: ()
             {
-              Get.to(CartListScreen());
+              Get.to(CartListScreen1());
             },
             icon: const Icon(
               Icons.shopping_cart,
@@ -177,7 +180,7 @@ class CategoryFragmentScreen extends StatelessWidget
                 return GestureDetector(
                   onTap: ()
                   {
-                    categoryController.setCategoryName(eachCategoryItemRecord!.category_name!);
+                    categoryController.setCategoryName(eachCategoryItemRecord.category_name!);
                     Get.to(AllItemsScreen(itemInfo: eachCategoryItemRecord));
 
                   },
@@ -190,13 +193,13 @@ class CategoryFragmentScreen extends StatelessWidget
                     ),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
-                      color: Colors.black,
+                      color: Colors.white70,
                       boxShadow:
                       const [
                         BoxShadow(
                           offset: Offset(0,0),
                           blurRadius: 6,
-                          color: Colors.white,
+                          color: Colors.black12,
                         ),
                       ],
                     ),
@@ -215,7 +218,6 @@ class CategoryFragmentScreen extends StatelessWidget
                                 //name and price
                                 Row(
                                   children: [
-
                                     //name
                                     Expanded(
                                       child: Text(
@@ -224,7 +226,7 @@ class CategoryFragmentScreen extends StatelessWidget
                                         overflow: TextOverflow.ellipsis,
                                         style: const TextStyle(
                                           fontSize: 18,
-                                          color: Colors.grey,
+                                          color: Colors.black54,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
@@ -274,7 +276,7 @@ class CategoryFragmentScreen extends StatelessWidget
                           ),
                           child: FadeInImage(
                             height: 130,
-                            width: 130,
+                            width: 180,
                             fit: BoxFit.cover,
                             placeholder: const AssetImage("images/place_holder.png"),
                             image: NetworkImage(

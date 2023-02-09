@@ -14,6 +14,7 @@ class Order
   DateTime? dateTime;
   String? shipmentAddress;
   String? phoneNumber;
+  String? dateTime1;
 
   Order({
     this.order_id,
@@ -30,6 +31,7 @@ class Order
     this.dateTime,
     this.shipmentAddress,
     this.phoneNumber,
+    this.dateTime1,
   });
 
   factory Order.fromJson(Map<String, dynamic> json)=> Order(
@@ -47,6 +49,7 @@ class Order
     dateTime: DateTime.parse(json["dateTime"]),
     shipmentAddress: json["shipmentAddress"],
     phoneNumber: json["phoneNumber"],
+    dateTime1: json["dateTime1"],
   );
 
   Map<String, dynamic> toJson()=>
@@ -64,6 +67,7 @@ class Order
         "status": status,
         "shipmentAddress": shipmentAddress,
         "phoneNumber": phoneNumber,
+        "dateTime1": dateTime1,
         // "imageFile": imageSelectedBase64,
       };
 }

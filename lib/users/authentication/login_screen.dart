@@ -81,7 +81,7 @@ class _LoginScreenState extends State<LoginScreen>
   Widget build(BuildContext context)
   {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.white,
       body: LayoutBuilder(
         builder: (context, cons)
         {
@@ -96,10 +96,10 @@ class _LoginScreenState extends State<LoginScreen>
                   //login screen header
                   SizedBox(
                     width: MediaQuery.of(context).size.width,
-                    height: 285,
+                    height: 350,
                     child: Image.asset(
-                      "images/login.jpg",
-                    ),
+                      "images/login1.jpg",
+                    fit: BoxFit.fill,),
                   ),
 
                   //login screen sign-in form
@@ -327,7 +327,6 @@ class _LoginScreenState extends State<LoginScreen>
                       ),
                     ),
                   ),
-
                 ],
               ),
             ),

@@ -62,7 +62,7 @@ class AdminGetAllOrdersScreen extends StatelessWidget
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.white,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -133,7 +133,7 @@ class AdminGetAllOrdersScreen extends StatelessWidget
               Center(
                 child: Text(
                   "Connection Waiting...",
-                  style: TextStyle(color: Colors.grey,),
+                  style: TextStyle(color: Colors.black54,),
                 ),
               ),
               Center(
@@ -150,7 +150,7 @@ class AdminGetAllOrdersScreen extends StatelessWidget
               Center(
                 child: Text(
                   "No orders found yet...",
-                  style: TextStyle(color: Colors.grey,),
+                  style: TextStyle(color: Colors.black54,),
                 ),
               ),
               Center(
@@ -178,7 +178,7 @@ class AdminGetAllOrdersScreen extends StatelessWidget
               Order eachOrderData = orderList[index];
 
               return Card(
-                color: Colors.white24,
+                color: Colors.white54,
                 child: Padding(
                   padding: const EdgeInsets.all(18),
                   child: ListTile(
@@ -195,7 +195,7 @@ class AdminGetAllOrdersScreen extends StatelessWidget
                           "Order ID # " + eachOrderData.order_id.toString(),
                           style: const TextStyle(
                             fontSize: 16,
-                            color: Colors.grey,
+                            color: Colors.black54,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -226,7 +226,7 @@ class AdminGetAllOrdersScreen extends StatelessWidget
                                   "dd MMMM, yyyy"
                               ).format(eachOrderData.dateTime!),
                               style: const TextStyle(
-                                color: Colors.grey,
+                                color: Colors.black54,
                               ),
                             ),
 
@@ -238,7 +238,7 @@ class AdminGetAllOrdersScreen extends StatelessWidget
                                   "hh:mm a"
                               ).format(eachOrderData.dateTime!),
                               style: const TextStyle(
-                                color: Colors.grey,
+                                color: Colors.black54,
                               ),
                             ),
 
@@ -268,7 +268,7 @@ class AdminGetAllOrdersScreen extends StatelessWidget
               Center(
                 child: Text(
                   "Nothing to show...",
-                  style: TextStyle(color: Colors.grey,),
+                  style: TextStyle(color: Colors.black54,),
                 ),
               ),
               Center(
