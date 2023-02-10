@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.digisfresh.digisapp">
    <application
-        android:label="digisapp"
+        android:label="Digi'sFresh"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

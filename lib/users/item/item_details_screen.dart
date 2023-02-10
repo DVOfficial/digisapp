@@ -78,6 +78,8 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen>
       print("Error :: " + errorMsg.toString());
     }
   }
+
+
   // getCurrentUserCartList() async
   // {
   //   List<Cart> cartListOfCurrentUser = [];

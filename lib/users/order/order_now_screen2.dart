@@ -271,6 +271,7 @@ class _OrderNowScreen2State extends State<OrderNowScreen2> {
             deleteSelectedItemsFromUserCartList(eachSelectedItemCartID);
             Get.to(OrderDetailsScreen(
               clickedOrderInfo: order,
+              orderStatus : "newOrder",
             ));
 
           });
@@ -323,7 +324,7 @@ class _OrderNowScreen2State extends State<OrderNowScreen2> {
     }
   }
 
-  showDialogBoxForImagePickingAndCapturing(context)
+  showDialogBoxForPaymentMode(context)
   {
     return showDialog(
         context: context,
@@ -333,18 +334,74 @@ class _OrderNowScreen2State extends State<OrderNowScreen2> {
             backgroundColor: Colors.white,
 
             title: const Text(
-              "Please Select Payment Mode",
+              "Please Select Payment Mode:",
               style: TextStyle(
                 color: Colors.deepOrange,
                 fontWeight: FontWeight.bold,
               ),
             ),
             children: [
+              // SimpleDialogOption(
+              //   onPressed: ()
+              //   {
+              //     // String selectedItemsString = widget.selectedCartListItemsInfo!.map((eachSelectedItem)=> jsonEncode(eachSelectedItem)).toList().join("||");
+              //     orderNowController.setPaymentSystem("RazorPay");
+              //     createOrder();
+              //     // var options = {
+              //     //   'key': "rzp_live_KXP39ErEKPxpxe",
+              //     //   'amount': widget.totalAmount,
+              //     //   'name': nameController.text,
+              //     //   'description': selectedItemsString,
+              //     //   'timeout':300,
+              //     //
+              //     // };
+              //     // try{
+              //     //   _razorpay.open(options);
+              //     // }catch(e){
+              //     //   print("Error"+e.toString());
+              //     //   Fluttertoast.showToast(msg: e.toString());
+              //
+              //
+              //     // Get.back();
+              //     // captureImageWithPhoneCamera();
+              //
+              //     // createOrder();
+              //     // Get.to(Razorpay_test(
+              //     //   selectedCartIDs: widget.selectedCartIDs,
+              //     //   selectedCartListItemsInfo: widget.selectedCartListItemsInfo,
+              //     //   totalAmount: widget.totalAmount,
+              //     //   // deliverySystem: orderNowController.deliverySys,
+              //     //   paymentSystem: orderNowController.paymentSys,
+              //     //   phoneNumber: phoneNumberController.text,
+              //     //   email: emailController.text,
+              //     //   shipmentAddress: shipmentAddressController.text,
+              //     //   note: noteToSellerController.text,
+              //     //   name:  nameController.text,
+              //     // ));
+              //   },
+              //
+              //   child: Container(
+              //     // color: Colors.orangeAccent,
+              //     padding: const EdgeInsets.all(8),
+              //     decoration: BoxDecoration(
+              //         border: Border.all(color: Colors.orange, width: 4)
+              //     ),
+              //     child: const Text(
+              //       "Razorpay via UPI\n(Credit/Debit Card or Net Banking)",
+              //       style: TextStyle(
+              //           color: Colors.black54,
+              //           fontSize: 16,
+              //           fontWeight: FontWeight.bold
+              //       ),
+              //     ),
+              //   ),
+              // ),
               SimpleDialogOption(
                 onPressed: ()
                 {
                   // String selectedItemsString = widget.selectedCartListItemsInfo!.map((eachSelectedItem)=> jsonEncode(eachSelectedItem)).toList().join("||");
                   orderNowController.setPaymentSystem("RazorPay");
+                  createOrder();
                   // var options = {
                   //   'key': "rzp_live_KXP39ErEKPxpxe",
                   //   'amount': widget.totalAmount,
@@ -363,7 +420,7 @@ class _OrderNowScreen2State extends State<OrderNowScreen2> {
                   // Get.back();
                   // captureImageWithPhoneCamera();
 
-                  createOrder();
+                  // createOrder();
                   // Get.to(Razorpay_test(
                   //   selectedCartIDs: widget.selectedCartIDs,
                   //   selectedCartListItemsInfo: widget.selectedCartListItemsInfo,
@@ -377,20 +434,30 @@ class _OrderNowScreen2State extends State<OrderNowScreen2> {
                   //   name:  nameController.text,
                   // ));
                 },
-                child: const Text(
-                  "Razorpay via UPI\n(Credit/Debit Card or Net Banking)",
-                  style: TextStyle(
-                      color: Colors.black54,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold
+
+                child: Container(
+                  margin: EdgeInsets.all(5),
+                  padding: EdgeInsets.all(10),
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                      color: Colors.orangeAccent,
+                      border: Border.all(
+                          color: Colors.orange, // Set border color
+                          width: 3.0),   // Set border width
+                      borderRadius: BorderRadius.all(
+                          Radius.circular(10.0)), // Set rounded corner radius
+                      boxShadow: [BoxShadow(blurRadius: 10,color: Colors.black,offset: Offset(1,3))] // Make rounded corner of border
                   ),
+                  child: Text("Razorpay via UPI\n(Credit/Debit Card or Net Banking)"),
                 ),
               ),
+
               const SizedBox(height: 4),
               SimpleDialogOption(
                 onPressed: ()
                 {
                   orderNowController.setPaymentSystem("Cash_On_Delivery");
+                  saveNewOrderInfo();
                   // pickImageFromPhoneGallery();
                   // Get.to(OrderConfirmationScreen1(
                   //       selectedCartIDs: selectedCartIDs,
@@ -402,8 +469,6 @@ class _OrderNowScreen2State extends State<OrderNowScreen2> {
                   //       shipmentAddress: shipmentAddressController.text,
                   //       note: noteToSellerController.text,
                   //     ));
-
-                  saveNewOrderInfo();
                   // String selectedItemsString = widget.selectedCartListItemsInfo!.map((eachSelectedItem)=> jsonEncode(eachSelectedItem)).toList().join("||");
                   // print(("error:"+selectedItemsString));
                   // Order order = Order(
@@ -430,16 +495,23 @@ class _OrderNowScreen2State extends State<OrderNowScreen2> {
 
 
                 },
-                child: const Text(
-                  "Cash On Delivery",
-                  style: TextStyle(
-                      color: Colors.black54,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold
+                child: Container(
+                  margin: EdgeInsets.all(5),
+                  padding: EdgeInsets.all(10),
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                      color: Colors.orangeAccent,
+                      border: Border.all(
+                          color: Colors.orange, // Set border color
+                          width: 3.0),   // Set border width
+                      borderRadius: BorderRadius.all(
+                          Radius.circular(10.0)), // Set rounded corner radius
+                      boxShadow: [BoxShadow(blurRadius: 10,color: Colors.black,offset: Offset(1,3))] // Make rounded corner of border
                   ),
+                  child: Text("Cash on Delivery"),
                 ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 8),
               SimpleDialogOption(
                 onPressed: ()
                 {
@@ -731,7 +803,7 @@ class _OrderNowScreen2State extends State<OrderNowScreen2> {
                   if(phoneNumberController.text.isNotEmpty && shipmentAddressController.text.isNotEmpty)
                   {
 
-                    showDialogBoxForImagePickingAndCapturing(context);
+                    showDialogBoxForPaymentMode(context);
 
                     // Get.to(OrderConfirmationScreen(
                     //   selectedCartIDs: selectedCartIDs,

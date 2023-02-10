@@ -8,14 +8,17 @@ import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
 import '../../api_connection/api_connection.dart';
+import '../fragments/dashboard_of_fragments.dart';
+import '../fragments/order_fragment_screen.dart';
 import '../model/order.dart';
 
 
 class OrderDetailsScreen extends StatefulWidget
 {
   final Order? clickedOrderInfo;
+  final String? orderStatus;
 
-  OrderDetailsScreen({this.clickedOrderInfo,});
+  OrderDetailsScreen({this.clickedOrderInfo,this.orderStatus});
 
   @override
   State<OrderDetailsScreen> createState() => _OrderDetailsScreenState();
@@ -130,9 +133,11 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.orangeAccent,
+        automaticallyImplyLeading: false,
         title: Text(
           DateFormat("dd MMMM, yyyy \nhh:mm a").format(tempDate),
           style: const TextStyle(fontSize: 14),
+
         ),
         actions: [
           Padding(
@@ -246,6 +251,61 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
               showContentText(DateFormat("dd MMMM, yyyy  hh:mm a").format(tempDate),),
 
               const SizedBox(height: 26,),
+
+              widget.orderStatus=="newOrder"?
+              Center(
+                child: Material(
+                  color: Colors.orangeAccent,
+                  borderRadius: BorderRadius.circular(8),
+
+                  child: InkWell(
+                    onTap: ()
+                    {
+                      Get.to(DashboardOfFragments());
+                    },
+                    borderRadius: BorderRadius.circular(32),
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 30,
+                        vertical: 12,
+                      ),
+                      child: Text(
+                        "Back to Home Screen",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ):Center(
+                child: Material(
+                  color: Colors.orangeAccent,
+                  borderRadius: BorderRadius.circular(8),
+
+                  child: InkWell(
+                    onTap: ()
+                    {
+                      Get.back();
+                    },
+                    borderRadius: BorderRadius.circular(32),
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 30,
+                        vertical: 12,
+                      ),
+                      child: Text(
+                        "Back to Orders",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
 //Order placed on
 //               showTitleText("Order Placed On:"),
 //               const SizedBox(height: 8,),
@@ -315,9 +375,9 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
 
         return Container(
           margin: EdgeInsets.fromLTRB(
-            16,
+            8,
             index == 0 ? 16 : 8,
-            16,
+            8,
             index == clickedOrderItemsInfo.length - 1 ? 16 : 8,
           ),
           decoration: BoxDecoration(
@@ -385,13 +445,27 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                       const SizedBox(height: 16),
 
                       //size + color
-                      Text(
-                        itemInfo["size"],
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          color: Colors.black87,
-                        ),
+                      Row(
+                        children: [
+                          Text(
+                            itemInfo["size"],
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              color: Colors.black87,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              "Qty: " + itemInfo["quantity"].toString(),
+                              style: const TextStyle(
+                                fontSize: 24,
+                                color: Colors.orangeAccent,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
 
                       const SizedBox(height: 16),
@@ -423,17 +497,17 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                 ),
               ),
 
-              //quantity
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "Qty: " + itemInfo["quantity"].toString(),
-                  style: const TextStyle(
-                    fontSize: 24,
-                    color: Colors.orangeAccent,
-                  ),
-                ),
-              ),
+              // //quantity
+              // Padding(
+              //   padding: const EdgeInsets.all(8.0),
+              //   child: Text(
+              //     "Qty: " + itemInfo["quantity"].toString(),
+              //     style: const TextStyle(
+              //       fontSize: 24,
+              //       color: Colors.orangeAccent,
+              //     ),
+              //   ),
+              // ),
 
 
             ],

@@ -167,7 +167,7 @@ class OrderFragmentScreen extends StatelessWidget
               Center(
                 child: Text(
                   "Connection Waiting...",
-                  style: TextStyle(color: Colors.grey,),
+                  style: TextStyle(color: Colors.black54,),
                 ),
               ),
               Center(
@@ -184,7 +184,7 @@ class OrderFragmentScreen extends StatelessWidget
               Center(
                 child: Text(
                     "No orders found yet...",
-                  style: TextStyle(color: Colors.grey,),
+                  style: TextStyle(color: Colors.black54,),
                 ),
               ),
               Center(
@@ -196,6 +196,139 @@ class OrderFragmentScreen extends StatelessWidget
         if(dataSnapshot.data!.length > 0)
         {
           List<Order> orderList = dataSnapshot.data!;
+          // return ListView.builder(
+          //   itemCount: dataSnapshot.data!.length,
+          //   shrinkWrap: true,
+          //   physics: const NeverScrollableScrollPhysics(),
+          //   scrollDirection: Axis.vertical,
+          //   itemBuilder: (context, index)
+          //   {
+          //     Order eachOrderData = orderList[index];
+          //         DateTime tempDate = new DateFormat("dd MMMM, yyyy  hh:mm a").parse(eachOrderData.dateTime1!);
+          //     //
+          //     return GestureDetector(
+          //       onTap: ()
+          //       {
+          //         Get.to(OrderDetailsScreen(
+          //                           clickedOrderInfo: eachOrderData,
+          //                         ));
+          //       },
+          //       child: Container(
+          //         margin: EdgeInsets.fromLTRB(
+          //           16,
+          //           index == 0 ? 16 : 8,
+          //           16,
+          //           index == dataSnapshot.data!.length - 1 ? 16 : 8,
+          //         ),
+          //         decoration: BoxDecoration(
+          //           borderRadius: BorderRadius.circular(20),
+          //           color: Colors.white70,
+          //           boxShadow:
+          //           const [
+          //             BoxShadow(
+          //               offset: Offset(0,0),
+          //               blurRadius: 6,
+          //               color: Colors.black12,
+          //             ),
+          //           ],
+          //         ),
+          //         child: Row(
+          //           children: [
+          //
+          //             //name + price
+          //             //tags
+          //             Expanded(
+          //               child: Padding(
+          //                 padding: const EdgeInsets.only(left: 15),
+          //                 child: Column(
+          //                   crossAxisAlignment: CrossAxisAlignment.start,
+          //                   children: [
+          //
+          //                     //name and price
+          //                     Row(
+          //                       children: [
+          //                         //name
+          //                         Expanded(
+          //                           child: Text(
+          //                             eachCategoryItemRecord.category_name!,
+          //                             maxLines: 2,
+          //                             overflow: TextOverflow.ellipsis,
+          //                             style: const TextStyle(
+          //                               fontSize: 18,
+          //                               color: Colors.black54,
+          //                               fontWeight: FontWeight.bold,
+          //                             ),
+          //                           ),
+          //                         ),
+          //
+          //                         // //price
+          //                         // Padding(
+          //                         //   padding: const EdgeInsets.only(left: 12, right: 12),
+          //                         //   child: Text(
+          //                         //     "\₹ " + eachClothItemRecord.price.toString(),
+          //                         //     maxLines: 2,
+          //                         //     overflow: TextOverflow.ellipsis,
+          //                         //     style: const TextStyle(
+          //                         //       fontSize: 18,
+          //                         //       color: Colors.purpleAccent,
+          //                         //       fontWeight: FontWeight.bold,
+          //                         //     ),
+          //                         //   ),
+          //                         // ),
+          //
+          //                       ],
+          //                     ),
+          //
+          //                     const SizedBox(height: 16,),
+          //
+          //                     // //tags
+          //                     // Text(
+          //                     //   "Tags: \n" + eachClothItemRecord.tags.toString().replaceAll("[", "").replaceAll("]", ""),
+          //                     //   maxLines: 2,
+          //                     //   overflow: TextOverflow.ellipsis,
+          //                     //   style: const TextStyle(
+          //                     //     fontSize: 12,
+          //                     //     color: Colors.black54,
+          //                     //   ),
+          //                     // ),
+          //
+          //                   ],
+          //                 ),
+          //               ),
+          //             ),
+          //
+          //             //image clothes
+          //             ClipRRect(
+          //               borderRadius: const BorderRadius.only(
+          //                 topRight: Radius.circular(20),
+          //                 bottomRight: Radius.circular(20),
+          //               ),
+          //               child: FadeInImage(
+          //                 height: 130,
+          //                 width: 180,
+          //                 fit: BoxFit.cover,
+          //                 placeholder: const AssetImage("images/place_holder.png"),
+          //                 image: NetworkImage(
+          //                   eachCategoryItemRecord.category_imagelink!,
+          //                 ),
+          //                 imageErrorBuilder: (context, error, stackTraceError)
+          //                 {
+          //                   return const Center(
+          //                     child: Icon(
+          //                       Icons.broken_image_outlined,
+          //                     ),
+          //                   );
+          //                 },
+          //               ),
+          //             ),
+          //
+          //           ],
+          //         ),
+          //       ),
+          //     );
+          //   },
+          // );
+
 
           return ListView.separated(
             padding: const EdgeInsets.all(16),
@@ -215,12 +348,13 @@ class OrderFragmentScreen extends StatelessWidget
               return Card(
                 color: Colors.white70,
                 child: Padding(
-                  padding: const EdgeInsets.all(18),
+                  padding: const EdgeInsets.fromLTRB(8,8,8,8),
                   child: ListTile(
                     onTap: ()
                     {
                       Get.to(OrderDetailsScreen(
                         clickedOrderInfo: eachOrderData,
+                        orderStatus : "oldOrder",
                       ));
                     },
                     title: Column(
@@ -230,10 +364,11 @@ class OrderFragmentScreen extends StatelessWidget
                           "Order ID # " + eachOrderData.order_id.toString(),
                           style: const TextStyle(
                             fontSize: 16,
-                            color: Colors.grey,
+                            color: Colors.black54,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
+                        const SizedBox(height: 4,),
                         Text(
                           "Amount: \₹ " + eachOrderData.totalAmount.toString(),
                           style: const TextStyle(
@@ -242,6 +377,24 @@ class OrderFragmentScreen extends StatelessWidget
                             fontWeight: FontWeight.bold,
                           ),
                         ),
+                        const SizedBox(height: 4,),
+                        Text(
+                          DateFormat(
+                              "dd MMMM, yyyy hh:mm a"
+                          ).format(tempDate),
+                          style: const TextStyle(
+                            color: Colors.black54,
+                          ),
+                        ),
+
+                        // Text(
+                        //   DateFormat(
+                        //       "hh:mm a"
+                        //   ).format(tempDate),
+                        //   style: const TextStyle(
+                        //     color: Colors.black54,
+                        //   ),
+                        // ),
                       ],
                     ),
                     trailing: Row(
@@ -261,7 +414,7 @@ class OrderFragmentScreen extends StatelessWidget
                             //     "dd MMMM, yyyy"
                             //   ).format(eachOrderData.dateTime!),
                             //   style: const TextStyle(
-                            //       color: Colors.grey,
+                            //       color: Colors.black54,
                             //   ),
                             // ),
                             //
@@ -273,34 +426,18 @@ class OrderFragmentScreen extends StatelessWidget
                             //       "hh:mm a"
                             //   ).format(eachOrderData.dateTime!),
                             //   style: const TextStyle(
-                            //     color: Colors.grey,
+                            //     color: Colors.black54,
                             //   ),
                             // ),
                             // //time
 
                             //date
-                            Text(
-                              DateFormat(
-                                  "dd MMMM, yyyy"
-                              ).format(tempDate),
-                              style: const TextStyle(
-                                color: Colors.grey,
-                              ),
-                            ),
 
-                Text(
-                  DateFormat(
-                  "hh:mm a"
-              ).format(tempDate),
-                              style: const TextStyle(
-                                color: Colors.grey,
-                              ),
-                            ),
 
                           ],
                         ),
 
-                        const SizedBox(width: 6),
+                        // const SizedBox(width: 6),
 
                         const Icon(
                           Icons.navigate_next,
@@ -309,11 +446,100 @@ class OrderFragmentScreen extends StatelessWidget
 
                       ],
                     ),
+              //       title: Column(
+              //         crossAxisAlignment: CrossAxisAlignment.start,
+              //         children: [
+              //           Text(
+              //             "Order ID # " + eachOrderData.order_id.toString(),
+              //             style: const TextStyle(
+              //               fontSize: 16,
+              //               color: Colors.black54,
+              //               fontWeight: FontWeight.bold,
+              //             ),
+              //           ),
+              //           const SizedBox(height: 6,),
+              //           Text(
+              //             "Amount: \₹ " + eachOrderData.totalAmount.toString(),
+              //             style: const TextStyle(
+              //               fontSize: 16,
+              //               color: Colors.orangeAccent,
+              //               fontWeight: FontWeight.bold,
+              //             ),
+              //           ),
+              //         ],
+              //       ),
+              //       trailing: Row(
+              //         mainAxisSize: MainAxisSize.min,
+              //         children: [
+              //
+              //           //date
+              //           //time
+              //           Column(
+              //             crossAxisAlignment: CrossAxisAlignment.end,
+              //             mainAxisAlignment: MainAxisAlignment.center,
+              //             children: [
+              //               //
+              //               // //date
+              //               // Text(
+              //               //   DateFormat(
+              //               //     "dd MMMM, yyyy"
+              //               //   ).format(eachOrderData.dateTime!),
+              //               //   style: const TextStyle(
+              //               //       color: Colors.black54,
+              //               //   ),
+              //               // ),
+              //               //
+              //               // const SizedBox(height: 4),
+              //               //
+              //               // //time
+              //               // Text(
+              //               //   DateFormat(
+              //               //       "hh:mm a"
+              //               //   ).format(eachOrderData.dateTime!),
+              //               //   style: const TextStyle(
+              //               //     color: Colors.black54,
+              //               //   ),
+              //               // ),
+              //               // //time
+              //
+              //               //date
+              //               Text(
+              //                 DateFormat(
+              //                     "dd MMMM, yyyy"
+              //                 ).format(tempDate),
+              //                 style: const TextStyle(
+              //                   color: Colors.black54,
+              //                 ),
+              //               ),
+              //
+              //               Text(
+              //     DateFormat(
+              //     "hh:mm a"
+              // ).format(tempDate),
+              //                 style: const TextStyle(
+              //                   color: Colors.black54,
+              //                 ),
+              //               ),
+              //
+              //             ],
+              //           ),
+              //
+              //           const SizedBox(width: 6),
+              //
+              //           const Icon(
+              //             Icons.navigate_next,
+              //             color: Colors.orangeAccent,
+              //           ),
+              //
+              //         ],
+              //       ),
                   ),
                 ),
               );
             },
           );
+
+
         }
         else
         {
@@ -323,7 +549,7 @@ class OrderFragmentScreen extends StatelessWidget
               Center(
                 child: Text(
                   "Nothing to show...No New Orders\n\nCheck history for previous orders",
-                  style: TextStyle(color: Colors.grey,),
+                  style: TextStyle(color: Colors.black54,),
                 ),
               ),
               // Center(

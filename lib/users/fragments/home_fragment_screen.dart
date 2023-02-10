@@ -10,19 +10,26 @@ import 'package:http/http.dart' as http;
 import '../../api_connection/api_connection.dart';
 import '../cart/cart_list_screen.dart';
 import '../cart/cart_list_screen1.dart';
+import '../controllers/cart_list_controller.dart';
 import '../controllers/category_controller.dart';
+import '../controllers/item_details_controller.dart';
 import '../item/all_items_screen.dart';
 import '../item/item_details_screen.dart';
 import '../item/item_details_screen1.dart';
 import '../item/search_items.dart';
 import '../model/Clothes1.dart';
+import '../model/cart.dart';
 import '../model/category.dart';
+import '../userPreferences/current_user.dart';
 
 
 class HomeFragmentScreen extends StatelessWidget
 {
+  final itemDetailsController = Get.put(ItemDetailsController());
   TextEditingController searchController = TextEditingController();
   CategoryController categoryController = Get.put(CategoryController());
+  final cartListController = Get.put(CartListController());
+  final currentOnlineUser = Get.put(CurrentUser());
 //fetching trending list from phpmysql
   Future<List<Clothes1>> getTrendingClothItems() async
   {
@@ -127,6 +134,80 @@ class HomeFragmentScreen extends StatelessWidget
 
     return allClothItemsList;
   }
+
+  getCurrentUserCartList() async
+  {
+    List<Cart> cartListOfCurrentUser = [];
+
+    try
+    {
+      var res = await http.post(
+          Uri.parse(API.getCartList),
+          body:
+          {
+            "currentOnlineUserID": currentOnlineUser.user.user_id.toString(),
+          }
+      );
+
+      if (res.statusCode == 200)
+      {
+        var responseBodyOfGetCurrentUserCartItems = jsonDecode(res.body);
+
+        if (responseBodyOfGetCurrentUserCartItems['success'] == true)
+        {
+          (responseBodyOfGetCurrentUserCartItems['currentUserCartData'] as List).forEach((eachCurrentUserCartItemData)
+          {
+            cartListOfCurrentUser.add(Cart.fromJson(eachCurrentUserCartItemData));
+          });
+        }
+        else
+        {
+          Fluttertoast.showToast(msg: "your Cart List is Empty.");
+        }
+
+        cartListController.setList(cartListOfCurrentUser);
+        if(cartListController.cartList.length>0)
+        {
+          cartListController.cartList.forEach((eachItem)
+          {
+            cartListController.addSelectedItem(eachItem.cart_id!);
+          });
+        }
+
+        calculateTotalAmount();
+
+      }
+      else
+      {
+        Fluttertoast.showToast(msg: "Status Code is not 200");
+      }
+    }
+    catch(errorMsg)
+    {
+      Fluttertoast.showToast(msg: "Error:: " + errorMsg.toString());
+    }
+    calculateTotalAmount();
+  }
+
+
+  calculateTotalAmount()
+  {
+    cartListController.setTotal(0);
+
+    if(cartListController.selectedItemList.length > 0)
+    {
+      cartListController.cartList.forEach((itemInCart)
+      {
+        if(cartListController.selectedItemList.contains(itemInCart.cart_id))
+        {
+          double eachItemTotalAmount = (itemInCart.price!) * (double.parse(itemInCart.quantity.toString()));
+
+          cartListController.setTotal(cartListController.total + eachItemTotalAmount);
+        }
+      });
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -271,7 +352,7 @@ class HomeFragmentScreen extends StatelessWidget
         if(dataSnapShot.data!.length > 0)
         {
           return SizedBox(
-            height: 260,
+            height: 270,
             child: ListView.builder(
               itemCount: dataSnapShot.data!.length,
               scrollDirection: Axis.horizontal,
@@ -313,7 +394,7 @@ class HomeFragmentScreen extends StatelessWidget
                             topRight: Radius.circular(22),
                           ),
                           child: FadeInImage(
-                            height: 150,
+                            height: 130,
                             width: 200,
                             fit: BoxFit.cover,
                             placeholder: const AssetImage("images/place_holder.png"),
@@ -337,6 +418,7 @@ class HomeFragmentScreen extends StatelessWidget
                           padding: const EdgeInsets.all(8.0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
 
                               //item name & price
@@ -361,46 +443,73 @@ class HomeFragmentScreen extends StatelessWidget
                                     "\₹ " + eachClothItemData.price.toString(),
                                     style: const TextStyle(
                                       color: Colors.orangeAccent,
-                                      fontSize: 18,
+                                      fontSize: 16,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                 ],
                               ),
 
-                              const SizedBox(height: 8,),
-
-                              //rating stars & rating numbers
-                              Row(
-                                children: [
-
-                                  //     RatingBar.builder(
-                                  //       initialRating: eachClothItemData.rating!,
-                                  //       minRating: 1,
-                                  //       direction: Axis.horizontal,
-                                  //       allowHalfRating: true,
-                                  //       itemCount: 5,
-                                  //       itemBuilder: (context, c)=> const Icon(
-                                  //         Icons.star,
-                                  //         color: Colors.amber,
-                                  //       ),
-                                  //       onRatingUpdate: (updateRating){},
-                                  //       ignoreGestures: true,
-                                  //       unratedColor: Colors.grey,
-                                  //       itemSize: 20,
-                                  //     ),
-
-
-
-                                  Text(
-                                    "(\₹" + eachClothItemData.subtext.toString() + ")",
-                                    style: const TextStyle(
-                                      color: Colors.black54,
+                              const SizedBox(height: 6,),
+                              Text(
+                                "(\₹" + eachClothItemData.subtext.toString() + ")",
+                                style: const TextStyle(
+                                  color: Colors.black54,
+                                ),
+                              ),
+                              const SizedBox(height: 6,),
+                              Material(
+                                elevation: 4,
+                                color: Colors.orangeAccent,
+                                borderRadius: BorderRadius.circular(10),
+                                child: InkWell(
+                                  onTap: ()
+                                  {
+                                    itemDetailsController.outofchickenStatus=="Out of Stock"?
+                                    Fluttertoast.showToast(msg: "Item is currently Out of Stock")
+                                        :addItemToCart(eachClothItemData.item_id!,eachClothItemData.sizes!);
+                                    itemDetailsController.setFakeCartCount(1);
+                                  },
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    height: 30,
+                                    child: const Text(
+                                      "Add to Cart",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.white,
+                                      ),
                                     ),
                                   ),
-
-                                ],
+                                ),
                               ),
+                              //rating stars & rating numbers
+                              // Row(
+                              //   children: [
+                              //
+                              //     //     RatingBar.builder(
+                              //     //       initialRating: eachClothItemData.rating!,
+                              //     //       minRating: 1,
+                              //     //       direction: Axis.horizontal,
+                              //     //       allowHalfRating: true,
+                              //     //       itemCount: 5,
+                              //     //       itemBuilder: (context, c)=> const Icon(
+                              //     //         Icons.star,
+                              //     //         color: Colors.amber,
+                              //     //       ),
+                              //     //       onRatingUpdate: (updateRating){},
+                              //     //       ignoreGestures: true,
+                              //     //       unratedColor: Colors.grey,
+                              //     //       itemSize: 20,
+                              //     //     ),
+                              //
+                              //
+                              //
+                              //
+                              //
+                              //   ],
+                              // ),
 
                             ],
                           ),
@@ -709,5 +818,45 @@ class HomeFragmentScreen extends StatelessWidget
           }
         }
     );
+  }
+
+  addItemToCart(int itemId, String sizes) async
+  {
+    try
+    {
+      var res = await http.post(
+        Uri.parse(API.addToCart),
+        body: {
+          "user_id": currentOnlineUser.user.user_id.toString(),
+          "item_id": itemId.toString(),
+          "quantity": itemDetailsController.quantity.toString(),
+          // "color": widget.itemInfo!.colors![itemDetailsController.color],
+          "size": sizes,
+          // "size": widget.itemInfo!.sizes![itemDetailsController.size],
+        },
+      );
+
+      if(res.statusCode == 200) //from flutter app the connection with api to server - success
+          {
+        var resBodyOfAddCart = jsonDecode(res.body);
+        if(resBodyOfAddCart['success'] == true)
+        {
+          Fluttertoast.showToast(msg: "item added to Cart Successfully\n Go to cart to place your order");
+        }
+        else
+        {
+          Fluttertoast.showToast(msg: "Item already added to cart");
+          // Fluttertoast.showToast(msg: "Error Occur. Item not saved to Cart and Try Again.");
+        }
+      }
+      else
+      {
+        Fluttertoast.showToast(msg: "Status is not 200");
+      }
+    }
+    catch(errorMsg)
+    {
+      print("Error :: " + errorMsg.toString());
+    }
   }
 }
